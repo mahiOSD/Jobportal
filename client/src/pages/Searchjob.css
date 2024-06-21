@@ -1,0 +1,52 @@
+.search-jobs {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.highlight {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.input-container {
+  position: relative;
+  width: 300px;
+}
+
+.input-container input {
+  width: calc(100% - 40px); 
+  padding-left: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.input-container .search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ccc;
+}
+
+.search-container .search-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+.search-container .search-button:hover {
+  background-color: #0056b3;
+}

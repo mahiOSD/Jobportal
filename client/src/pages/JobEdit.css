@@ -1,0 +1,28 @@
+.job-edit {
+  padding: 20px;
+}
+
+.job-edit h2 {
+  text-align: center;
+}
+
+.job-edit form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.job-edit label {
+  font-weight: bold;
+}
+
+.job-edit input {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.job-edit button {
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+}
