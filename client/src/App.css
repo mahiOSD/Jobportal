@@ -1,0 +1,18 @@
+.App {
+  text-align: center;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center; /* Center the main content horizontally */
+  padding: 20px;
+}
+
+main {
+  width: 100%;
+  max-width: 800px; /* Set a max-width to keep the content readable */
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add some shadow for better visual separation */
+  background-color: #fff;
+  border-radius: 8px;
+}
