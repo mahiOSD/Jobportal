@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faBriefcase, faPlusSquare, faMoneyBillWave } from '@fortawesome/free-solid-svg-icons';
+import { FaUserCircle } from 'react-icons/fa';
 import './Header.css';
 
 const Header = () => {
@@ -15,6 +16,9 @@ const Header = () => {
       </div>
       <nav>
         <ul>
+          <li>
+            <Link to="/" className="nav-link">Home</Link>
+          </li>
           <li>
             <Link to="/search" className="nav-link">
               <FontAwesomeIcon icon={faSearch} className="nav-icon" />
@@ -41,9 +45,9 @@ const Header = () => {
           </li>
         </ul>
       </nav>
-      <a href="https://www.google.com" className="dashboard-icon-link">
-        <img src="https://static.thenounproject.com/png/140257-200.png" alt="Dashboard Icon" className="dashboard-icon" />
-      </a>
+      <div className="dashboard-icon">
+        <FaUserCircle size={24} />
+      </div>
     </header>
   );
 };
