@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate hook for navigation
-import './AddJob.css'; // Import the CSS file for styling
+import { useNavigate } from 'react-router-dom'; 
+import './AddJob.css'; 
 
-const AddJob = ({ addJobToList }) => { // Accept addJobToList prop to update job list
+const AddJob = ({ addJobToList }) => { 
   const [job, setJob] = useState({
     title: '',
     description: '',
