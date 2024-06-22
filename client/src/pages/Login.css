@@ -1,0 +1,86 @@
+.authPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  .container {
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  
+  .header img.small-logo {
+    width: 100px;
+    height: auto;
+  }
+  
+  .header h3 {
+    font-size: 24px;
+    margin-top: 10px;
+  }
+  
+  .inputTag {
+    margin-bottom: 15px;
+  }
+  
+  .inputTag label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .inputTag input {
+    width: calc(100% - 30px);
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .inputTag div {
+    display: flex;
+    align-items: center;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  .banner {
+    text-align: left;
+    margin-top: 10px;
+  }
+  
+  .banner img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+  }
+  

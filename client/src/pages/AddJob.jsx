@@ -24,9 +24,11 @@ const AddJob = ({ addJobToList }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/jobs/add', newJob); 
-      console.log(response.data); 
-      addJobToList(response.data); 
+      const response = await axios.post('http://localhost:5000/api/jobs/add', newJob, {
+        withCredentials: true,
+      });
+      console.log(response.data);
+      addJobToList(response.data);
       setNewJob({
         title: '',
         companyName: '',
@@ -39,11 +41,9 @@ const AddJob = ({ addJobToList }) => {
         requiredSkills: '',
       });
 
-      
-      window.location.href = '/search'; 
+      window.location.href = '/search';
     } catch (error) {
       console.error('Error adding job:', error);
-      
     }
   };
 

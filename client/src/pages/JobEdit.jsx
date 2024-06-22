@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './JobEdit.css'; 
+import './JobEdit.css';
 import axios from 'axios';
 
 const JobEdit = ({ job, onSave, onCancel }) => {
@@ -14,12 +14,14 @@ const JobEdit = ({ job, onSave, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:5000/api/jobs/update/${updatedJob._id}`, updatedJob); 
-      console.log('Updated job:', response.data); 
-      onSave(updatedJob); 
+      const response = await axios.put(
+        `http://localhost:5000/api/jobs/update/${updatedJob._id}`,
+        updatedJob
+      );
+      console.log('Updated job:', response.data);
+      onSave(updatedJob);
     } catch (error) {
       console.error('Error updating job:', error);
-      
     }
   };
 
@@ -28,42 +30,99 @@ const JobEdit = ({ job, onSave, onCancel }) => {
       <h2>Edit Job</h2>
       <div className="form-group">
         <label>Title:</label>
-        <input type="text" name="title" value={updatedJob.title} onChange={handleChange} required />
+        <input
+          type="text"
+          name="title"
+          value={updatedJob.title}
+          onChange={handleChange}
+          required
+        />
       </div>
       <div className="form-group">
         <label>Company Name:</label>
-        <input type="text" name="companyName" value={updatedJob.companyName} onChange={handleChange} required />
+        <input
+          type="text"
+          name="companyName"
+          value={updatedJob.companyName}
+          onChange={handleChange}
+          required
+        />
       </div>
       <div className="form-group">
         <label>Description:</label>
-        <textarea name="description" value={updatedJob.description} onChange={handleChange} required />
+        <textarea
+          name="description"
+          value={updatedJob.description}
+          onChange={handleChange}
+          required
+        />
       </div>
       <div className="form-group">
         <label>Location:</label>
-        <input type="text" name="location" value={updatedJob.location} onChange={handleChange} required />
+        <input
+          type="text"
+          name="location"
+          value={updatedJob.location}
+          onChange={handleChange}
+          required
+        />
       </div>
       <div className="form-group">
         <label>Job Type:</label>
-        <input type="text" name="jobType" value={updatedJob.jobType} onChange={handleChange} required />
+        <input
+          type="text"
+          name="jobType"
+          value={updatedJob.jobType}
+          onChange={handleChange}
+          required
+        />
       </div>
       <div className="form-group">
         <label>Salary:</label>
-        <input type="text" name="salary" value={updatedJob.salary} onChange={handleChange} required />
+        <input
+          type="text"
+          name="salary"
+          value={updatedJob.salary}
+          onChange={handleChange}
+          required
+        />
       </div>
       <div className="form-group">
         <label>Date:</label>
-        <input type="text" name="date" value={updatedJob.date} onChange={handleChange} required />
+        <input
+          type="text"
+          name="date"
+          value={updatedJob.date}
+          onChange={handleChange}
+          required
+        />
       </div>
       <div className="form-group">
         <label>Experience Level:</label>
-        <input type="text" name="experienceLevel" value={updatedJob.experienceLevel} onChange={handleChange} required />
+        <input
+          type="text"
+          name="experienceLevel"
+          value={updatedJob.experienceLevel}
+          onChange={handleChange}
+          required
+        />
       </div>
       <div className="form-group">
         <label>Required Skills:</label>
-        <input type="text" name="requiredSkills" value={updatedJob.requiredSkills} onChange={handleChange} required />
+        <input
+          type="text"
+          name="requiredSkills"
+          value={updatedJob.requiredSkills}
+          onChange={handleChange}
+          required
+        />
       </div>
-      <button type="submit" className="btn-save">Save</button>
-      <button type="button" className="btn-cancel" onClick={onCancel}>Cancel</button>
+      <button type="submit" className="btn-save">
+        Save
+      </button>
+      <button type="button" className="btn-cancel" onClick={onCancel}>
+        Cancel
+      </button>
     </form>
   );
 };
