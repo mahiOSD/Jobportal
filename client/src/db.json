@@ -1,0 +1,38 @@
+{
+    "jobs": [
+      {
+        "id": "1",
+        "title": "Software Engineer",
+        "description": "We are looking for a skilled Software Engineer to join our team...",
+        "company": "Tech Solutions Inc.",
+        "location": "Dhaka",
+        "salary": "৳80,000 - ৳100,000 per year",
+        "icon": "/images/software-engineer-icon.png"
+      },
+      {
+        "id": "2",
+        "title": "Data Scientist",
+        "description": "Join our Data Science team to analyze and interpret complex data sets...",
+        "company": "Data Analytics Corp.",
+        "location": "Dhaka",
+        "salary": "৳90,000 - ৳110,000 per year",
+        "icon": "/images/data-scientist-icon.png"
+      }
+    ],
+    "relatedJobs": {
+      "1": [
+        {
+          "id": "2",
+          "title": "Data Scientist"
+        }
+      ],
+      "2": [
+        {
+          "id": "1",
+          "title": "Software Engineer"
+        }
+      ]
+    }
+  }
+  
+  
