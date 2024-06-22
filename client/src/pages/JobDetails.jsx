@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import './JobsDetails.css';
+=======
+// JobDetails.jsx
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import './JobDetails.css';
+>>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
 
 const JobDetails = () => {
   const { jobId } = useParams();
 
+<<<<<<< HEAD
   
+=======
+  // Manually define job details based on jobId
+>>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
   let job = null;
   if (jobId === '1') {
     job = {
@@ -16,7 +27,11 @@ const JobDetails = () => {
       company: 'Tech Solutions Inc.',
       location: 'Dhaka',
       salary: '৳80,000 - ৳100,000 per year',
+<<<<<<< HEAD
       icon: 'photo_2024-06-22_23-05-13.jpg',
+=======
+      icon: '/images/software-engineer-icon.png',
+>>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
     };
   } else if (jobId === '2') {
     job = {
@@ -26,7 +41,11 @@ const JobDetails = () => {
       company: 'Data Analytics Corp.',
       location: 'Dhaka',
       salary: '৳90,000 - ৳110,000 per year',
+<<<<<<< HEAD
       icon: '/images/data-scientist-icon.jpg',
+=======
+      icon: '/images/data-scientist-icon.png',
+>>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
     };
   } else if (jobId === '3') {
     job = {
@@ -60,18 +79,30 @@ const JobDetails = () => {
     };
   }
 
+<<<<<<< HEAD
   
+=======
+  // Return early if job not found
+>>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
   if (!job) {
     return <div>No job details found.</div>;
   }
 
   const handleSaveJob = () => {
+<<<<<<< HEAD
     
+=======
+    // Logic to save job (e.g., API call, local storage)
+>>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
     alert(`Job "${job.title}" saved.`);
   };
 
   const handleApplyNow = () => {
+<<<<<<< HEAD
     
+=======
+    // Logic to handle job application (e.g., redirect to application form)
+>>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
     alert(`Applying for job "${job.title}".`);
   };
 
@@ -94,3 +125,7 @@ const JobDetails = () => {
 };
 
 export default JobDetails;
+<<<<<<< HEAD
+=======
+
+>>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
