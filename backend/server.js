@@ -2,7 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import jobsRouter from './routes/jobs.js'; // Ensure correct path to your routes
+import path from 'path';
+import jobsRouter from './routes/jobs.js';
 
 dotenv.config();
 
@@ -25,7 +26,16 @@ connection.once('open', () => {
 });
 
 // Routes
-app.use('/api/jobs', jobsRouter); // Mount jobsRouter for /api/jobs endpoint
+app.use('/api/jobs', jobsRouter);
+
+// Serve static files from the React app
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 // Start server
 app.listen(port, () => {
