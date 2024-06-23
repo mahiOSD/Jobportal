@@ -51,7 +51,7 @@ input[type="text"] {
   border-radius: 4px;
   background-color: #007bff; /* or any other button color */
   color: white;
-<<<<<<< HEAD
+
 }
 
 .search-button:hover, .clear-button:hover {
@@ -81,8 +81,6 @@ input[type="text"] {
 
 .job-details h3 {
   margin-bottom: 5px;
-=======
->>>>>>> bfc78c1732aa255be3c26d707a0aff45809bbd98
 }
 
 .search-button:hover, .clear-button:hover {
