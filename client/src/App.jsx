@@ -1,66 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Header from './components/Header';
 import Home from './pages/Home';
 import SearchJobs from './pages/Searchjobs';
 import JobList from './pages/JobList';
 import JobEdit from './pages/JobEdit';
 import AddJob from './pages/AddJob';
+import JobDetails from './pages/JobDetails';
 import './App.css';
 
 const App = () => {
-  const [jobs, setJobs] = useState([
-    { 
-      id: 1, 
-      title: 'Software Engineer', 
-      companyName: 'Tech Solutions Inc.', 
-      description: 'Design intuitive user interfaces for web and mobile applications.',
-      location: 'Dhaka',
-      jobType: 'Full-time',
-      salary: '$70 - $80K',
-      date: 'June 21, 2024',
-      experienceLevel: 'Mid-level',
-      requiredSkills: ['UI/UX Design', 'Prototyping', 'Wireframing']
-    },
-    { 
-      id: 2, 
-      title: 'Data Scientist', 
-      companyName: 'Data Analytics Corp.', 
-      description: 'Manage infrastructure automation and deployment pipelines.',
-      location: 'Dhaka',
-      jobType: 'Full-time',
-      salary: '$80 - $120k',
-      date: 'June 21, 2024',
-      experienceLevel: 'Senior',
-      requiredSkills: ['AWS', 'Docker', 'CI/CD']
-    },
-    { 
-      id: 3, 
-      title: 'Web Development Teacher', 
-      companyName: 'Tech Education Institute', 
-      description: 'Develop and maintain software applications for internal systems.',
-      location: 'Remote or Dhaka',
-      jobType: 'Contract',
-      salary: '$60 - $70k',
-      date: 'June 21, 2024',
-      experienceLevel: 'Junior',
-      requiredSkills: ['JavaScript', 'React', 'Node.js']
-    },
-
-  ]);
-
+  const [jobs, setJobs] = useState([]);
+  const [filteredJobs, setFilteredJobs] = useState([]); 
   const [editingJob, setEditingJob] = useState(null);
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState(''); 
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/jobs'); 
+        setJobs(response.data);
+        setFilteredJobs(response.data); 
+      } catch (error) {
+        console.error('Error fetching jobs:', error);
+      }
+    };
+
+    fetchJobs();
+  }, []);
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    if (!query.trim()) {
+      
+      setFilteredJobs(jobs);
+    } else {
+      
+      const filtered = jobs.filter(job =>
+        job.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredJobs(filtered);
+    }
+  };
 
   const handleEdit = (job) => {
     setEditingJob(job);
     navigate('/edit-job');
   };
 
-  const handleSave = (updatedJob) => {
-    setJobs(jobs.map(job => (job.id === updatedJob.id ? updatedJob : job)));
-    setEditingJob(null);
-    navigate('/jobs');
+  const handleSave = async (updatedJob, query) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/jobs/update/${updatedJob._id}`, updatedJob); 
+      console.log('Updated job:', response.data); 
+
+      
+      const updatedJobs = jobs.map(job => (job._id === updatedJob._id ? updatedJob : job));
+      setJobs(updatedJobs);
+
+      
+      const updatedFilteredJobs = updatedJobs.filter(job =>
+        job.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredJobs(updatedFilteredJobs);
+
+      
+      navigate('/jobs');
+    } catch (error) {
+      console.error('Error updating job:', error);
+      
+    }
   };
 
   const handleCancel = () => {
@@ -68,19 +78,24 @@ const App = () => {
     navigate('/jobs');
   };
 
-  const handleDelete = (id) => {
-    setJobs(jobs.filter(job => job.id !== id));
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/jobs/${id}`);
+      setJobs(jobs.filter(job => job._id !== id));
+      setFilteredJobs(filteredJobs.filter(job => job._id !== id)); 
+    } catch (error) {
+      console.error('Error deleting job:', error);
+    }
   };
 
-  const addJobToList = (newJob) => {
-    // Ensure only objects are added to the jobs array and all required fields are present
-    if (newJob && typeof newJob === 'object' && !Array.isArray(newJob)) {
-      const id = jobs.length + 1; // Generate a new unique ID for the new job
-      const jobWithId = { id, ...newJob };
-      setJobs([...jobs, jobWithId]);
-      console.log('Job added:', jobWithId);
-    } else {
-      console.error('Invalid job data:', newJob);
+  const addJobToList = async (newJob) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/jobs/add', newJob);
+      setJobs([...jobs, response.data]);
+      setFilteredJobs([...filteredJobs, response.data]); 
+      navigate('/jobs');
+    } catch (error) {
+      console.error('Error adding job:', error);
     }
   };
 
@@ -88,17 +103,26 @@ const App = () => {
     <div className="App">
       <Header />
       <div className="main-content">
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/search" element={<SearchJobs jobs={jobs} />} />
-            <Route path="/jobs" element={<JobList jobs={jobs} onEdit={handleEdit} onDelete={handleDelete} />} />
-            {editingJob && (
-              <Route path="/edit-job" element={<JobEdit job={editingJob} onSave={handleSave} onCancel={handleCancel} />} />
-            )}
-            <Route path="/add-job" element={<AddJob addJobToList={addJobToList} />} />
-          </Routes>
-        </main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/search"
+            element={<SearchJobs jobs={jobs} onSearch={handleSearch} />}
+          />
+          <Route
+            path="/jobs"
+            element={<JobList jobs={filteredJobs} onEdit={handleEdit} onDelete={handleDelete} />}
+          />
+          {editingJob && (
+            <Route
+              path="/edit-job"
+              element={<JobEdit job={editingJob} onSave={(updatedJob) => handleSave(updatedJob, searchQuery)} onCancel={handleCancel} />}
+            />
+          )}
+          <Route path="/add-job" element={<AddJob addJobToList={addJobToList} />} />
+          {}
+          <Route path="/job/:jobId" element={<JobDetails jobs={filteredJobs} />} />
+        </Routes>
       </div>
     </div>
   );

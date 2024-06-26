@@ -1,9 +1,10 @@
-// SearchJobs.jsx
+/* eslint-disable react/display-name */
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import './Searchjobs.css';
+import './Searchjob.css';
 
 const SearchJobs = ({ jobs }) => {
   const navigate = useNavigate();
@@ -76,12 +77,11 @@ SearchJobs.propTypes = {
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
-      // Add other job properties as needed (companyName, salary, etc.)
     })
   ).isRequired,
 };
 
-// Sample job list for demonstration
+
 const jobList = [
   { id: 1, title: 'Software Engineer' },
   { id: 2, title: 'Data Scientist' },

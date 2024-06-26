@@ -1,12 +1,11 @@
-// JobDetails.jsx
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import './JobDetails.css';
+import './JobsDetails.css';
 
 const JobDetails = () => {
   const { jobId } = useParams();
 
-  // Manually define job details based on jobId
+
   let job = null;
   if (jobId === '1') {
     job = {
@@ -16,7 +15,7 @@ const JobDetails = () => {
       company: 'Tech Solutions Inc.',
       location: 'Dhaka',
       salary: '৳80,000 - ৳100,000 per year',
-      icon: '/images/software-engineer-icon.png',
+      icon: 'photo_2024-06-22_23-05-13.jpg',
     };
   } else if (jobId === '2') {
     job = {
@@ -26,7 +25,7 @@ const JobDetails = () => {
       company: 'Data Analytics Corp.',
       location: 'Dhaka',
       salary: '৳90,000 - ৳110,000 per year',
-      icon: '/images/data-scientist-icon.png',
+      icon: '/images/data-scientist-icon.jpg',
     };
   } else if (jobId === '3') {
     job = {
@@ -60,18 +59,18 @@ const JobDetails = () => {
     };
   }
 
-  // Return early if job not found
+
   if (!job) {
     return <div>No job details found.</div>;
   }
 
   const handleSaveJob = () => {
-    // Logic to save job (e.g., API call, local storage)
+
     alert(`Job "${job.title}" saved.`);
   };
 
   const handleApplyNow = () => {
-    // Logic to handle job application (e.g., redirect to application form)
+
     alert(`Applying for job "${job.title}".`);
   };
 
@@ -94,4 +93,3 @@ const JobDetails = () => {
 };
 
 export default JobDetails;
-

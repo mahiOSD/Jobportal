@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './AddJob.css'; // Adjust the CSS file name if needed
+import './AddJob.css';
+import axios from 'axios';
 
 const AddJob = ({ addJobToList }) => {
   const [newJob, setNewJob] = useState({
@@ -12,7 +13,7 @@ const AddJob = ({ addJobToList }) => {
     salary: '',
     date: '',
     experienceLevel: '',
-    requiredSkills: []
+    requiredSkills: '',
   });
 
   const handleChange = (e) => {
@@ -20,136 +21,72 @@ const AddJob = ({ addJobToList }) => {
     setNewJob({ ...newJob, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addJobToList(newJob);
-    setNewJob({
-      title: '',
-      companyName: '',
-      description: '',
-      location: '',
-      jobType: '',
-      salary: '',
-      date: '',
-      experienceLevel: '',
-      requiredSkills: []
-    });
+    try {
+      const response = await axios.post('http://localhost:5000/api/jobs/add', newJob); 
+      console.log(response.data); 
+      addJobToList(response.data); 
+      setNewJob({
+        title: '',
+        companyName: '',
+        description: '',
+        location: '',
+        jobType: '',
+        salary: '',
+        date: '',
+        experienceLevel: '',
+        requiredSkills: '',
+      });
+
+      
+      window.location.href = '/search'; 
+    } catch (error) {
+      console.error('Error adding job:', error);
+      
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="add-job-form">
       <h2>Add New Job</h2>
       <div className="form-group">
-        <label htmlFor="title">Job Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={newJob.title}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Title:</label>
+        <input type="text" name="title" value={newJob.title} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="companyName">Company Name</label>
-        <input
-          type="text"
-          id="companyName"
-          name="companyName"
-          value={newJob.companyName}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Company Name:</label>
+        <input type="text" name="companyName" value={newJob.companyName} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          value={newJob.description}
-          onChange={handleChange}
-          className="form-control"
-          rows="4"
-          required
-        />
+        <label>Description:</label>
+        <textarea name="description" value={newJob.description} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="location">Location</label>
-        <input
-          type="text"
-          id="location"
-          name="location"
-          value={newJob.location}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Location:</label>
+        <input type="text" name="location" value={newJob.location} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="jobType">Job Type</label>
-        <input
-          type="text"
-          id="jobType"
-          name="jobType"
-          value={newJob.jobType}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Job Type:</label>
+        <input type="text" name="jobType" value={newJob.jobType} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="salary">Salary</label>
-        <input
-          type="text"
-          id="salary"
-          name="salary"
-          value={newJob.salary}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Salary:</label>
+        <input type="text" name="salary" value={newJob.salary} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="date">Date</label>
-        <input
-          type="text"
-          id="date"
-          name="date"
-          value={newJob.date}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Date:</label>
+        <input type="text" name="date" value={newJob.date} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="experienceLevel">Experience Level</label>
-        <input
-          type="text"
-          id="experienceLevel"
-          name="experienceLevel"
-          value={newJob.experienceLevel}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Experience Level:</label>
+        <input type="text" name="experienceLevel" value={newJob.experienceLevel} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="requiredSkills">Required Skills </label>
-        <input
-          type="text"
-          id="requiredSkills"
-          name="requiredSkills"
-          value={newJob.requiredSkills.join(', ')}
-          onChange={(e) => setNewJob({ ...newJob, requiredSkills: e.target.value.split(',').map(skill => skill.trim()) })}
-          className="form-control"
-          required
-        />
+        <label>Required Skills:</label>
+        <input type="text" name="requiredSkills" value={newJob.requiredSkills} onChange={handleChange} required />
       </div>
-      <div className="form-actions">
-        <button type="submit" className="btn-save">Save</button>
-      </div>
+      <button type="submit" className="btn-save">Save</button>
     </form>
   );
 };

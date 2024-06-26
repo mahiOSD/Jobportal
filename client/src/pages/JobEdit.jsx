@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './JobEdit.css'; // Adjust the CSS file name if needed
+import './JobEdit.css'; 
+import axios from 'axios';
 
 const JobEdit = ({ job, onSave, onCancel }) => {
   const [updatedJob, setUpdatedJob] = useState(job);
@@ -10,121 +11,66 @@ const JobEdit = ({ job, onSave, onCancel }) => {
     setUpdatedJob({ ...updatedJob, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave(updatedJob);
+    try {
+      const response = await axios.put(`http://localhost:5000/api/jobs/update/${updatedJob._id}`, updatedJob); 
+      console.log('Updated job:', response.data); 
+      onSave(updatedJob); 
+    } catch (error) {
+      console.error('Error updating job:', error);
+      
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="job-edit-form">
       <h2>Edit Job</h2>
       <div className="form-group">
-        <label htmlFor="title">Job Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={updatedJob.title}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Title:</label>
+        <input type="text" name="title" value={updatedJob.title} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="companyName">Company Name</label>
-        <input
-          type="text"
-          id="companyName"
-          name="companyName"
-          value={updatedJob.companyName}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Company Name:</label>
+        <input type="text" name="companyName" value={updatedJob.companyName} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="salary">Salary</label>
-        <input
-          type="text"
-          id="salary"
-          name="salary"
-          value={updatedJob.salary}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Description:</label>
+        <textarea name="description" value={updatedJob.description} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="location">Location</label>
-        <input
-          type="text"
-          id="location"
-          name="location"
-          value={updatedJob.location}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Location:</label>
+        <input type="text" name="location" value={updatedJob.location} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="jobType">Job Type</label>
-        <input
-          type="text"
-          id="jobType"
-          name="jobType"
-          value={updatedJob.jobType}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Job Type:</label>
+        <input type="text" name="jobType" value={updatedJob.jobType} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="date">Date</label>
-        <input
-          type="text"
-          id="date"
-          name="date"
-          value={updatedJob.date}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Salary:</label>
+        <input type="text" name="salary" value={updatedJob.salary} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="experienceLevel">Experience Level</label>
-        <input
-          type="text"
-          id="experienceLevel"
-          name="experienceLevel"
-          value={updatedJob.experienceLevel}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Date:</label>
+        <input type="text" name="date" value={updatedJob.date} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label htmlFor="requiredSkills">Required Skills (comma-separated)</label>
-        <input
-          type="text"
-          id="requiredSkills"
-          name="requiredSkills"
-          value={updatedJob.requiredSkills.join(', ')}
-          onChange={handleChange}
-          className="form-control"
-          required
-        />
+        <label>Experience Level:</label>
+        <input type="text" name="experienceLevel" value={updatedJob.experienceLevel} onChange={handleChange} required />
       </div>
-      <div className="form-actions">
-        <button type="submit" className="btn-save">Save</button>
-        <button type="button" className="btn-cancel" onClick={onCancel}>Cancel</button>
+      <div className="form-group">
+        <label>Required Skills:</label>
+        <input type="text" name="requiredSkills" value={updatedJob.requiredSkills} onChange={handleChange} required />
       </div>
+      <button type="submit" className="btn-save">Save</button>
+      <button type="button" className="btn-cancel" onClick={onCancel}>Cancel</button>
     </form>
   );
 };
 
 JobEdit.propTypes = {
   job: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     companyName: PropTypes.string.isRequired,
     salary: PropTypes.string.isRequired,
