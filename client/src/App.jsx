@@ -8,6 +8,7 @@ import JobEdit from './pages/JobEdit';
 import AddJob from './pages/AddJob';
 import './App.css';
 
+
 const App = () => {
   const [jobs, setJobs] = useState([
     { 
