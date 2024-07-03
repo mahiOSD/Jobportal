@@ -3,12 +3,11 @@ import { useParams } from 'react-router-dom';
 import './JobsDetails.css';
 
 const JobDetails = () => {
-  const { jobId } = useParams();
+  const { id } = useParams(); 
 
-
-  let job = null;
-  if (jobId === '1') {
-    job = {
+  
+  const jobs = [
+    {
       id: '1',
       title: 'Software Engineer',
       description: 'We are looking for a skilled Software Engineer to join our team...',
@@ -16,9 +15,8 @@ const JobDetails = () => {
       location: 'Dhaka',
       salary: '৳80,000 - ৳100,000 per year',
       icon: 'photo_2024-06-22_23-05-13.jpg',
-    };
-  } else if (jobId === '2') {
-    job = {
+    },
+    {
       id: '2',
       title: 'Data Scientist',
       description: 'Join our Data Science team to analyze and interpret complex data sets...',
@@ -26,51 +24,47 @@ const JobDetails = () => {
       location: 'Dhaka',
       salary: '৳90,000 - ৳110,000 per year',
       icon: '/images/data-scientist-icon.jpg',
-    };
-  } else if (jobId === '3') {
-    job = {
+    },
+    {
       id: '3',
       title: 'Web Development Teacher',
-      description: 'We are seeking a passionate Web Development Teacher to join our education team. In this role, you will teach students the fundamentals of web development, including HTML, CSS, JavaScript, and modern frameworks. Your responsibilities will include developing curriculum, leading classes, and providing guidance to students to help them succeed in their learning journey.',
+      description: 'We are seeking a passionate Web Development Teacher to join our education team...',
       company: 'Tech Education Institute',
       location: 'Remote or Dhaka',
       salary: '৳60,000 - ৳80,000 per year',
-      icon: '/images/web-development-icon.png', 
-    };
-  } else if (jobId === '4') {
-    job = {
+      icon: '/images/web-development-icon.png',
+    },
+    {
       id: '4',
       title: 'Junior/Graduate Software Developer',
-      description: 'We are looking for a Junior/Graduate Software Developer to join our team. The ideal candidate is a recent graduate with a strong foundation in software development principles and practices. You will work on various projects, contributing to software design, development, testing, and maintenance.',
+      description: 'We are looking for a Junior/Graduate Software Developer to join our team...',
       company: 'Innovative Tech Solutions',
       location: 'Dhaka',
       salary: '৳50,000 - ৳70,000 per year',
-      icon: '/images/software-developer-icon.png', 
-    };
-  } else if (jobId === '5') {
-    job = {
+      icon: '/images/software-developer-icon.png',
+    },
+    {
       id: '5',
       title: 'Junior/Graduate Web Developer',
-      description: 'Join our dynamic web development team as a Junior/Graduate Web Developer. This entry-level position is perfect for recent graduates with a passion for web technologies. You will assist in building and maintaining websites and web applications, learning and growing in a supportive environment.',
+      description: 'Join our dynamic web development team as a Junior/Graduate Web Developer...',
       company: 'Creative Web Agency',
       location: 'Remote or Dhaka',
       salary: '৳45,000 - ৳65,000 per year',
-      icon: '/images/web-developer-icon.png', 
-    };
-  }
+      icon: '/images/web-developer-icon.png',
+    },
+  ];
 
+  const job = jobs.find((job) => job.id === id);
 
   if (!job) {
     return <div>No job details found.</div>;
   }
 
   const handleSaveJob = () => {
-
     alert(`Job "${job.title}" saved.`);
   };
 
   const handleApplyNow = () => {
-
     alert(`Applying for job "${job.title}".`);
   };
 
