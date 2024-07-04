@@ -1,32 +1,26 @@
 {
-    "version": 2,
-    "builds": [
-      {
-<<<<<<< HEAD
-        "src": "index.js",
-=======
-        "src": "server.js",
->>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/api/(.*)",
-<<<<<<< HEAD
-        "dest": "/index.js"
-=======
-        "dest": "/server.js"
->>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/index.js"
+    },
+    {
+      "src": "/assets/(.*)",
+      "headers": {
+        "Content-Type": "application/javascript"
       },
-      {
-        "src": "/(.*)",
-        "dest": "/client/build/$1"
-      }
-    ]
-  }
-<<<<<<< HEAD
-  
-=======
-  
->>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/client/build/$1"
+    }
+  ]
+}
