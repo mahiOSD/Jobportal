@@ -81,7 +81,11 @@ SearchJobs.propTypes = {
   ).isRequired,
 };
 
+<<<<<<< HEAD
 
+=======
+// Sample job list for demonstration
+>>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
 const jobList = [
   { id: 1, title: 'Software Engineer' },
   { id: 2, title: 'Data Scientist' },

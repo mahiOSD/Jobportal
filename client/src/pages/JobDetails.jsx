@@ -5,9 +5,16 @@ import './JobsDetails.css';
 const JobDetails = () => {
   const { id } = useParams(); 
 
+<<<<<<< HEAD
   
   const jobs = [
     {
+=======
+
+  let job = null;
+  if (jobId === '1') {
+    job = {
+>>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
       id: '1',
       title: 'Software Engineer',
       description: 'We are looking for a skilled Software Engineer to join our team...',
@@ -15,8 +22,14 @@ const JobDetails = () => {
       location: 'Dhaka',
       salary: '৳80,000 - ৳100,000 per year',
       icon: 'photo_2024-06-22_23-05-13.jpg',
+<<<<<<< HEAD
     },
     {
+=======
+    };
+  } else if (jobId === '2') {
+    job = {
+>>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
       id: '2',
       title: 'Data Scientist',
       description: 'Join our Data Science team to analyze and interpret complex data sets...',
@@ -24,8 +37,14 @@ const JobDetails = () => {
       location: 'Dhaka',
       salary: '৳90,000 - ৳110,000 per year',
       icon: '/images/data-scientist-icon.jpg',
+<<<<<<< HEAD
     },
     {
+=======
+    };
+  } else if (jobId === '3') {
+    job = {
+>>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
       id: '3',
       title: 'Web Development Teacher',
       description: 'We are seeking a passionate Web Development Teacher to join our education team...',
@@ -56,15 +75,27 @@ const JobDetails = () => {
 
   const job = jobs.find((job) => job.id === id);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
   if (!job) {
     return <div>No job details found.</div>;
   }
 
   const handleSaveJob = () => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
     alert(`Job "${job.title}" saved.`);
   };
 
   const handleApplyNow = () => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2ac89c72285305fe9f22c094789937b7da3b7760
     alert(`Applying for job "${job.title}".`);
   };
 
