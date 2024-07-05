@@ -10,17 +10,6 @@
     {
       "src": "/api/(.*)",
       "dest": "/server.js"
-    },
-    {
-      "src": "/assets/(.*)",
-      "headers": {
-        "Content-Type": "application/javascript"
-      },
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/build/$1"
     }
   ]
 }
