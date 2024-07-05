@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import './JobsDetails.css';
+import './JobDetails.css';
 
 const JobDetails = () => {
   const { id } = useParams(); 
