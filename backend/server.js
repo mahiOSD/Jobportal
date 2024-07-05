@@ -28,6 +28,8 @@ mongoose
 app.use("/api/auth", authRouter);
 app.use("/api/jobs", jobsRouter);
 
+app.get("/", (req, res) => res.json({ message: "hello world" }));
+
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });
