@@ -1,12 +1,11 @@
 import express from 'express';
-import { registerUser, loginUser  } from '../controllers/authController.js';
+import { registerUser, loginUser, sendResetLink, resetPassword } from '../controllers/authController.js';
 
 const router = express.Router();
 
-// Define the signup & login route
 router.post('/signup', registerUser);
 router.post('/login', loginUser);
-// Define the profile route
-//router.get('/profile', auth, getUserProfile);
+router.post('/send-reset-link', sendResetLink);
+router.post('/reset-password/:token', resetPassword); 
 
 export default router;

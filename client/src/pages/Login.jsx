@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
-//import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './Login.css'; 
+import PropTypes from 'prop-types'; // Import PropTypes
+import './Login.css';
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
+
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         email,
@@ -18,24 +21,17 @@ const Login = ({ setUser }) => {
       });
 
       if (response.data && response.data.token) {
-        // Store token in local storage
         localStorage.setItem('token', response.data.token);
-        // Fetch user data or use response.data.user if provided
-      // Example assuming response includes user data
-      const userDataResponse = await axios.get('http://localhost:5000/api/auth/user', {
-        headers: {
-          Authorization: `Bearer ${response.data.token}`,
-        },
-      });
-
-      if (userDataResponse.data) {
-        setUser(userDataResponse.data);
-      }
-
-        // Navigate to home page or desired route
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        setUser(response.data.user);
         navigate('/');
       }
     } catch (error) {
+      if (error.response && error.response.data) {
+        setError(error.response.data.message);
+      } else {
+        setError('An error occurred. Please try again.');
+      }
       console.error('Error logging in:', error);
     }
   };
@@ -45,6 +41,7 @@ const Login = ({ setUser }) => {
       <div className="login-card">
         <h2>Login</h2>
         <form onSubmit={handleSubmit}>
+          {error && <p className="error">{error}</p>}
           <label>
             <span>Email:</span>
             <input
@@ -65,13 +62,18 @@ const Login = ({ setUser }) => {
           </label>
           <button type="submit" className="login-button">Login</button>
         </form>
+        <p>
+          Forgot your password?{' '}
+          <button onClick={() => navigate('/forgot-password')} className="forgot-password-link">Reset it here</button>
+        </p>
       </div>
     </div>
   );
 };
-/*
+
+// Add PropTypes validation
 Login.propTypes = {
-  setUser: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired, // Validate setUser as a required function
 };
-*/
+
 export default Login;

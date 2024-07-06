@@ -1,6 +1,4 @@
-/*
-const crypto = require('crypto');
+import { randomBytes } from 'crypto';
 
-const secretKey = crypto.randomBytes(32).toString('hex');
-console.log('Generated JWT secret key:', secretKey);
-*/
+const secretKey = randomBytes(32).toString('hex');
+console.log(secretKey);
