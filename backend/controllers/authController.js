@@ -64,6 +64,7 @@ export const sendResetLink = async (req, res) => {
       text: `You requested a password reset. Click the following link to reset your password: ${resetLink}`,
     };
 
+
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: 'Reset link sent to email' });
   } catch (error) {
@@ -72,48 +73,32 @@ export const sendResetLink = async (req, res) => {
   }
 };
 
-export const resetPassword = async (req, res) => {
-  console.log('Reset password route hit');
 
+
+export const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
 
-  if (!password || password.length < 6) {
-    return res.status(400).json({ message: 'Password must be at least 6 characters long' });
-  }
-
   try {
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Decoded token:', decoded); // Debugging line
-    if (!decoded || !decoded.id) {
-      return res.status(400).json({ message: 'Invalid or expired token' });
-    }
-
     const user = await User.findById(decoded.id);
-    console.log('Found user:', user); // Debugging line
+
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Preserve existing fields and set the new password
+    
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
-
-    // Ensure the user object has required fields
-    user.phone = user.phone || 'default phone number'; // or handle appropriately
-    user.name = user.name || 'default name'; // or handle appropriately
-
     await user.save();
 
     res.status(200).json({ message: 'Password reset successfully' });
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
-      return res.status(400).json({ message: 'Token has expired' });
-    }
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(400).json({ message: 'Invalid token' });
+      return res.status(400).json({ message: 'Password reset token has expired. Please request a new link.' });
     }
     console.error('Error resetting password:', error);
-    res.status(500).json({ message: 'Error resetting password', error: error.message });
+    res.status(500).json({ message: 'Error resetting password' });
   }
 };
