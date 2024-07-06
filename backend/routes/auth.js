@@ -1,9 +1,11 @@
 import express from 'express';
-import { registerUser } from '../controllers/authController.js'; // Ensure the correct path
+import { registerUser, loginUser, sendResetLink, resetPassword } from '../controllers/authController.js';
 
 const router = express.Router();
 
-// Define the signup route
 router.post('/signup', registerUser);
+router.post('/login', loginUser);
+router.post('/send-reset-link', sendResetLink);
+router.post('/reset-password/:token', resetPassword); 
 
 export default router;
