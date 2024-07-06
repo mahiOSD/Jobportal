@@ -1,8 +1,11 @@
 import express from 'express';
+//import auth from '../middleware/auth.js';
 import Job from '../models/job.js'; 
 
 const router = express.Router();
 
+// Apply auth middleware to protect routes
+//router.use(auth);
 
 router.get('/', async (req, res) => {
   try {
@@ -54,5 +57,14 @@ router.put('/update/:id', async (req, res) => {
     res.status(400).json('Error: ' + err);
   }
 });
-
+/*
+router.get('/', async (req, res) => {
+  try {
+    const jobs = await Job.find();
+    res.json(jobs);
+  } catch (err) {
+    res.status(400).json('Error: ' + err);
+  }
+});
+*/
 export default router;

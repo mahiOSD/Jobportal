@@ -1,0 +1,80 @@
+/* Login.css */
+
+/* Container for the login page */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    background-color: #f0f2f5;
+  }
+  
+  /* Card style for the login form */
+  .login-card {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  /* Header style for the login form */
+  .login-card h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  /* Label style for the form fields */
+  .login-card label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+  }
+  
+  /* Span style for the form field descriptions */
+  .login-card label span {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    color: #777;
+  }
+  
+  /* Input field style */
+  .login-card input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  
+  /* Button style for the login form */
+  .login-button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  /* Hover effect for the button */
+  .login-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Error message style */
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  

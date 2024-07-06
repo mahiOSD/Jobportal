@@ -1,59 +1,77 @@
-// components/Login.js
 import React, { useState } from 'react';
-import axios from 'axios';
+//import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import axios from 'axios';
+import './Login.css'; 
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        'http://localhost:5000/api/auth/login',
-        { email, password },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true, // Ensure credentials are sent with CORS
-        }
-      );
-      toast.success('Logged in successfully!');
-      setUser(data.user);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      localStorage.setItem('token', data.token);
-      navigate('/'); // Redirect to home page after successful login
+      const response = await axios.post('http://localhost:5000/api/auth/login', {
+        email,
+        password,
+      });
+
+      if (response.data && response.data.token) {
+        // Store token in local storage
+        localStorage.setItem('token', response.data.token);
+        // Fetch user data or use response.data.user if provided
+      // Example assuming response includes user data
+      const userDataResponse = await axios.get('http://localhost:5000/api/auth/user', {
+        headers: {
+          Authorization: `Bearer ${response.data.token}`,
+        },
+      });
+
+      if (userDataResponse.data) {
+        setUser(userDataResponse.data);
+      }
+
+        // Navigate to home page or desired route
+        navigate('/');
+      }
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.error('Error logging in:', error);
     }
   };
 
   return (
-    <div className="login-form">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Login</button>
-      </form>
+    <div className="login-container">
+      <div className="login-card">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <label>
+            <span>Email:</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            <span>Password:</span>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+          <button type="submit" className="login-button">Login</button>
+        </form>
+      </div>
     </div>
   );
 };
-
+/*
+Login.propTypes = {
+  setUser: PropTypes.func.isRequired,
+};
+*/
 export default Login;

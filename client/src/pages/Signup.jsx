@@ -1,112 +1,86 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
-import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-import './Signup.css';
+import axios from 'axios';
+import './Signup.css'; 
 
-const Signup = ({ setUser }) => {
-  const [email, setEmail] = useState('');
+const Signup = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:5000/api/auth/signup',
-        { name, phone, email, password },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          withCredentials: true, 
-        }
-      );
-      const { data } = response;
-      toast.success(data.message);
-      setUser(data.user);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      navigate('/');
-    } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error('Failed to register. Please try again.');
+      const response = await axios.post('http://localhost:5000/api/auth/signup', {
+        name,
+        phone,
+        email,
+        password,
+      });
+      if (response.data) {
+        // Save token and user data to localStorage
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Navigate to home page
+        navigate('/');
       }
+    } catch (error) {
+      console.error('Error registering user:', error);
     }
   };
-  
+
   return (
-    <section className="authPage">
-      <div className="container">
-        <div className="header">
-          <img src="/images/JobZeelogo.png" alt="logo" className="small-logo" />
-          <h3>Create a new account</h3>
-        </div>
-        <form onSubmit={handleRegister}>
-          <div className="inputTag">
-            <label>Name</label>
-            <div>
-              <input
-                type="text"
-                placeholder="Zeeshan"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-          <div className="inputTag">
-            <label>Email Address</label>
-            <div>
-              <input
-                type="email"
-                placeholder="zk@gmail.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-          <div className="inputTag">
-            <label>Phone Number</label>
-            <div>
-              <input
-                type="tel"
-                placeholder="1234567890"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-          <div className="inputTag">
-            <label>Password</label>
-            <div>
-              <input
-                type="password"
-                placeholder="Your Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-          <button type="submit">Register</button>
+    <div className="signup-container">
+      <div className="signup-card">
+        <h2>Sign Up</h2>
+        <form onSubmit={handleSubmit}>
+          <label>
+            <span>Name:</span>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            <span>Phone:</span>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            <span>Email:</span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            <span>Password:</span>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+          <button type="submit" className="signup-button">Sign Up</button>
         </form>
       </div>
-      <div className="banner">
-        <img src="/images/register.png" alt="login" />
-      </div>
-    </section>
+    </div>
   );
 };
 
 Signup.propTypes = {
   setUser: PropTypes.func.isRequired,
 };
-
 export default Signup;
