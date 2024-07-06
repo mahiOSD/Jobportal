@@ -1,8 +1,10 @@
+// src/pages/ResetPassword.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+import { useParams } from 'react-router-dom';
 
-const ResetPassword = ({ token }) => {
+const ResetPassword = () => {
+  const { token } = useParams(); // Extract token from URL
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -10,7 +12,11 @@ const ResetPassword = ({ token }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/reset-password/${token}`, { password });
+      const response = await axios.post(
+        `http://localhost:5000/api/auth/reset-password/${token}`,
+        { password },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
       setSuccess(response.data.message);
     } catch (error) {
       setError(error.response ? error.response.data.message : 'Error resetting password');
@@ -18,7 +24,6 @@ const ResetPassword = ({ token }) => {
     }
   };
 
-  
   return (
     <form onSubmit={handleSubmit}>
       <input
@@ -33,10 +38,6 @@ const ResetPassword = ({ token }) => {
       {success && <p>{success}</p>}
     </form>
   );
-};
-
-ResetPassword.propTypes = {
-  token: PropTypes.string.isRequired, 
 };
 
 export default ResetPassword;
