@@ -24,7 +24,7 @@ const AddJob = ({ addJobToList }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/jobs/add', newJob, {
+      const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
         withCredentials: true,
       });
       console.log(response.data);
