@@ -13,7 +13,7 @@ const ResetPassword = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/auth/reset-password/${token}`,
+        `https://jobportal-black.vercel.app/api/auth/reset-password/${token}`,
         { password },
         { headers: { 'Content-Type': 'application/json' } }
       );
