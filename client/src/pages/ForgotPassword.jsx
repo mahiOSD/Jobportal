@@ -9,7 +9,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     
     try {
-      await axios.post('http://localhost:5000/api/auth/send-reset-link', { email });
+      await axios.post('https://jobportal-black.vercel.app/api/auth/send-reset-link', { email });
       setMessage('Password reset email sent. Check your inbox.');
     } catch (error) {
       console.error('Error requesting password reset:', error);
