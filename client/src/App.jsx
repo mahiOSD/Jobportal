@@ -27,7 +27,7 @@ const App = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/jobs', {
+        const response = await axios.get('https://jobportal-black.vercel.app/api/jobs', {
           withCredentials: true,
         });
         setJobs(response.data);
@@ -67,7 +67,7 @@ const App = () => {
   const handleSave = async (updatedJob) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/jobs/update/${updatedJob._id}`,
+        `https://jobportal-black.vercel.app/api/jobs/update/${updatedJob._id}`,
         updatedJob
       );
       const updatedJobs = jobs.map((job) =>
@@ -93,7 +93,7 @@ const App = () => {
 
   const handleDelete = async (jobId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
+      await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
       const updatedJobs = jobs.filter((job) => job._id !== jobId);
       setJobs(updatedJobs);
       setFilteredJobs(updatedJobs);
