@@ -6,26 +6,29 @@ import './Home.css';
 const Home = () => {
   return (
     <div className="home">
-      <h1>Welcome to JobPortal</h1>
-      <p>Your one-stop destination for finding your dream job</p>
-      <div className="features">
-        <div className="feature-item">
-          <FaSearch className="feature-icon" />
-          <h3>Search Jobs</h3>
-          <p>Find the job that fits your life</p>
+    
+      <div className="home-banner">
+        <h1>The Easiest Way to Get Your New Job</h1>
+        <p>Your one-stop destination for finding your dream job</p>
+        <div className="features">
+          <div className="feature-item">
+            <FaSearch className="feature-icon" />
+            <h3>Search Jobs</h3>
+            <p>Find the job that fits your life</p>
+          </div>
+          <div className="feature-item">
+            <FaBriefcase className="feature-icon" />
+            <h3>Post Jobs</h3>
+            <p>Reach millions of job seekers</p>
+          </div>
+          <div className="feature-item">
+            <FaUser className="feature-icon" />
+            <h3>Create Profile</h3>
+            <p>Showcase your skills and experience</p>
+          </div>
         </div>
-        <div className="feature-item">
-          <FaBriefcase className="feature-icon" />
-          <h3>Post Jobs</h3>
-          <p>Reach millions of job seekers</p>
-        </div>
-        <div className="feature-item">
-          <FaUser className="feature-icon" />
-          <h3>Create Profile</h3>
-          <p>Showcase your skills and experience</p>
-        </div>
+        <Link to="/search-jobs" className="cta-button">Get Started</Link>
       </div>
-      <Link to="/search-jobs" className="cta-button">Get Started</Link>
     </div>
   );
 };

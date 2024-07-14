@@ -4,11 +4,11 @@
   align-items: center;
   width: 100%;
   padding: 10px 20px;
-  background-color: #75428167;
+  /*background-color: #00000067;*/
 }
 
 .logo-container {
-  display: flex;
+  /*display: flex;*/
   align-items: center;
 }
 
