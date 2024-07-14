@@ -25,7 +25,9 @@ const Signup = () => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         // Navigate to home page
+        //location.reload();
         navigate('/');
+        location.reload();
       }
     } catch (error) {
       console.error('Error registering user:', error);
