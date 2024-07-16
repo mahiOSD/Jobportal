@@ -27,7 +27,7 @@ const Home = () => {
             <p>Showcase your skills and experience</p>
           </div>
         </div>
-        <Link to="/search-jobs" className="cta-button">Get Started</Link>
+        <Link to="/signup" className="cta-button">Get Started</Link>
       </div>
     </div>
   );

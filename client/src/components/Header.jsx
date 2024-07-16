@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faBriefcase, faPlusSquare, faMoneyBillWave } from '@fortawesome/free-solid-svg-icons';
 import { FaUserCircle } from 'react-icons/fa';
+import UserProfile from './UserProfile';
 import './Header.css';
 
 const Header = ({ user, setUser }) => {
@@ -55,7 +56,7 @@ const Header = ({ user, setUser }) => {
                 </Link>
               </li>
               <li>
-                <button onClick={handleLogout} className="nav-link">Logout</button>
+                <UserProfile user={user} setUser={setUser} />
               </li>
             </>
           ) : (
@@ -70,11 +71,6 @@ const Header = ({ user, setUser }) => {
           )}
         </ul>
       </nav>
-      {user && (
-        <div className="dashboard-icon">
-          <FaUserCircle size={24} />
-        </div>
-      )}
     </header>
   );
 };
