@@ -1,3 +1,5 @@
+//login.jsx
+
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,10 +18,11 @@ const Login = ({ setUser }) => {
     setError(''); // Clear previous errors
 
     try {
-      const response = await axios.post(`https://jobportal-black.vercel.app/api/auth/login`, {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        'https://jobportal-black.vercel.app/api/auth/login',
+        { email, password },
+        { withCredentials: true } // Include credentials
+      );
 
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
