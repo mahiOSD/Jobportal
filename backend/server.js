@@ -1,4 +1,5 @@
 // server.js
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -11,9 +12,15 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5001;
 
-app.use(cors({
-  origin: 'https://jobportal-nmce.vercel.app',
-}));
+const corsOptions = {
+  origin: 'https://jobportal-nmce.vercel.app', // Replace with your client's origin
+  credentials: true, // Enable credentials
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
