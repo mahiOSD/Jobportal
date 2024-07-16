@@ -1,3 +1,4 @@
+
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
@@ -9,6 +10,7 @@ export const registerUser = async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
+      console.error(`User already exists for email: ${email}`);
       return res.status(400).json({ message: 'User already exists' });
     }
 
@@ -29,11 +31,13 @@ export const loginUser = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
+      console.error(`User not found for email: ${email}`);
       return res.status(404).json({ message: 'User not found' });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
+      console.error(`Invalid credentials for email: ${email}`);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -51,6 +55,7 @@ export const sendResetLink = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
+      console.error(`User not found for email: ${email}`);
       return res.status(404).json({ message: 'User not found' });
     }
 
@@ -64,7 +69,6 @@ export const sendResetLink = async (req, res) => {
       text: `You requested a password reset. Click the following link to reset your password: ${resetLink}`,
     };
 
-
     await transporter.sendMail(mailOptions);
     res.status(200).json({ message: 'Reset link sent to email' });
   } catch (error) {
@@ -73,22 +77,19 @@ export const sendResetLink = async (req, res) => {
   }
 };
 
-
-
 export const resetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;
 
   try {
-    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
     if (!user) {
+      console.error(`User not found for token: ${token}`);
       return res.status(404).json({ message: 'User not found' });
     }
 
-    
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
     await user.save();
@@ -96,9 +97,10 @@ export const resetPassword = async (req, res) => {
     res.status(200).json({ message: 'Password reset successfully' });
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
+      console.error(`Password reset token has expired for token: ${token}`);
       return res.status(400).json({ message: 'Password reset token has expired. Please request a new link.' });
     }
     console.error('Error resetting password:', error);
-    res.status(500).json({ message: 'Error resetting password' });
+    res.status(500).json({ message: 'Error resetting password', error: error.message });
   }
 };
