@@ -5,14 +5,12 @@ import dotenv from 'dotenv';
 import jobsRouter from './routes/jobs.js';
 import authRouter from './routes/auth.js';
 
-
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 5000;
 
 app.use(cors());
-
 app.use(express.json());
 
 mongoose
@@ -27,10 +25,8 @@ mongoose
     console.error('Could not connect to MongoDB:', err);
   });
 
-
 app.use('/api/auth', authRouter);
 app.use('/api/jobs', jobsRouter);
-
 
 app.get('/', (req, res) => res.json({ message: 'hello world' }));
 

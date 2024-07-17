@@ -1,21 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faBriefcase, faPlusSquare, faMoneyBillWave } from '@fortawesome/free-solid-svg-icons';
-import { FaUserCircle } from 'react-icons/fa';
+import { faSearch, faBriefcase, faPlusSquare } from '@fortawesome/free-solid-svg-icons'; // Removed faMoneyBillWave
 import UserProfile from './UserProfile';
 import './Header.css';
 
-const Header = ({ user, setUser }) => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem('user');
-    navigate('/');
-  };
-
+const Header = ({ user, onLogout }) => {
   return (
     <header className="header">
       <div className="logo-container">
@@ -44,19 +35,13 @@ const Header = ({ user, setUser }) => {
                 </Link>
               </li>
               <li>
-                <Link to="#" className="nav-link">
-                  <FontAwesomeIcon icon={faMoneyBillWave} className="nav-icon" />
-                  Salary estimate
-                </Link>
-              </li>
-              <li>
                 <Link to="/add-job" className="nav-link">
                   <FontAwesomeIcon icon={faPlusSquare} className="nav-icon" />
                   Post A Job
                 </Link>
               </li>
               <li>
-                <UserProfile user={user} setUser={setUser} />
+                <UserProfile user={user} setUser={onLogout} />
               </li>
             </>
           ) : (
@@ -77,7 +62,7 @@ const Header = ({ user, setUser }) => {
 
 Header.propTypes = {
   user: PropTypes.object,
-  setUser: PropTypes.func,
+  onLogout: PropTypes.func,
 };
 
 export default Header;
