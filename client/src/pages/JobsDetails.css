@@ -1,26 +1,31 @@
-body {
-    font-family: Arial, sans-serif;
-  }
-
-
 .job-details {
-  max-width: 600px;
-  margin: 0 auto;
   padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-top: 20px;
 }
 
 .job-details h2 {
-  margin-bottom: 10px;
+  margin: 0 0 20px;
 }
 
-.job-details img {
-  margin-bottom: 20px;
-  display: block;
+.job-icon {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.location-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
 }
 
 .job-details ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .job-details ul li {
@@ -28,20 +33,32 @@ body {
 }
 
 .button-container {
+  display: flex;
+  gap: 10px;
   margin-top: 20px;
 }
 
 .save-button, .apply-button {
-  margin-right: 10px;
   padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
   border: none;
   border-radius: 4px;
-  background-color: #28a745; /* green color */
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: #28a745;
   color: white;
 }
 
-.save-button:hover, .apply-button:hover {
-  background-color: #218838; /* darker shade or different hover color */
+.save-button:hover {
+  background-color: #218838;
+}
+
+.apply-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.apply-button:hover {
+  background-color: #0056b3;
 }
