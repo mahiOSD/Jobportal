@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './Searchjob.css';
+import locationIcon from '/images/location-icon.jpg'; 
 
 const SearchJobs = ({ jobs }) => {
   const navigate = useNavigate();
@@ -79,7 +80,10 @@ const SearchJobs = ({ jobs }) => {
             <div key={job.id} className="job-card" onClick={() => handleJobClick(job.id)}>
               <div className="job-card-header">
                 <h3>{job.title}</h3>
-                <p className="job-location">{job.location}</p>
+                <p className="job-location">
+                  <img src={locationIcon} alt="Location icon" className="location-icon" />
+                  {job.location}
+                </p>
               </div>
               <div className="job-card-body">
                 <p className="job-description">{job.description}</p>
