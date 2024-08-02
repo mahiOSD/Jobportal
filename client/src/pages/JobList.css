@@ -1,62 +1,93 @@
 .job-list {
   padding: 20px;
+  overflow-x: auto;
 }
 
-.job-list h2 {
-  text-align: center;
-}
-
-.search-bar {
-  text-align: center;
-  margin-bottom: 20px;
-  position: relative;
-  max-width: 300px;
-  margin: 0 auto; /* Center the search bar */
-}
-
-.search-bar input {
+.jobs-table {
   width: 100%;
-  padding: 8px 12px 8px 36px; /* Adjust padding to make space for the icon */
-  border: 1px solid #ddd;
-  outline: none;
-  border-radius: 4px;
+  border-collapse: collapse;
+  min-width: 1000px; 
+}
+
+.jobs-table th,
+.jobs-table td {
+  border: 1px solid rgba(0, 0, 0, 0.295); 
+  padding: 8px;
+  text-align: center;
+}
+
+.jobs-table th {
+  background-color: #f2f2f2;
+}
+
+.search-row th {
+  border: none; 
+}
+
+.search-options {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  padding: 10px 0;
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
 .search-icon {
   position: absolute;
-  top: 50%;
   left: 10px;
-  transform: translateY(-50%);
-  color: #666;
+  font-size: 1.2em;
+  color: #161414;
 }
 
-.job-list table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-.job-list th,
-.job-list td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: center;
-}
-
-.job-list th {
-  background-color: #f2f2f2;
-}
-
-.job-list button {
-  margin: 0 5px;
-  padding: 5px 10px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
+.search-options input {
+  width: 300px; 
+  padding: 8px 8px 8px 30px; 
   border-radius: 4px;
+  border: 1px solid #ddd;
+  outline: none;
+  margin-right: 8px;
 }
 
-.job-list button:hover {
+.search-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  background-color: #23717c;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+.search-button:hover {
   background-color: #0056b3;
+}
+
+.job-edit button,
+.job-delete button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.job-edit button {
+  background-color: #a506fb;
+  color: white;
+}
+
+.job-edit button:hover {
+  background-color: #0056b3;
+}
+
+.job-delete button {
+  background-color: #fb0b6f;
+  color: white;
+}
+
+.job-delete button:hover {
+  background-color: #c82333;
 }

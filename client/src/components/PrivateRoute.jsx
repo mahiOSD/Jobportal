@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ user, children }) => {
   return user ? children : <Navigate to="/login" />;
@@ -8,7 +8,7 @@ const PrivateRoute = ({ user, children }) => {
 
 PrivateRoute.propTypes = {
   user: PropTypes.object,
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
 };
 
 export default PrivateRoute;
