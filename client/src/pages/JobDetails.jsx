@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import axios from 'axios';
 import './JobDetails.css';
-import locationIcon from '/images/location-icon.jpg'; 
+import locationIcon from '/images/location-icon.jpg';
 
-const JobDetails = ({ jobs }) => {
-  const { id } = useParams();
-  
-  const job = jobs.find((job) => job.id === id);
+const JobDetails = () => {
+  const { jobId } = useParams();
+  const [job, setJob] = useState(null);
+
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const response = await axios.get(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
+        setJob(response.data);
+      } catch (error) {
+        console.error('Error fetching job details', error);
+      }
+    };
+
+    fetchJob();
+  }, [jobId]);
 
   if (!job) {
-    return <div>No job details found.</div>;
+    return <div>Loading job details...</div>;
   }
-
-  const handleSaveJob = () => {
-    alert(`Job "${job.title}" saved.`);
-  };
-
-  const handleApplyNow = () => {
-    alert(`Applying for job "${job.title}".`);
-  };
 
   return (
     <div className="job-details">
@@ -36,25 +40,11 @@ const JobDetails = ({ jobs }) => {
         <li><strong>Salary:</strong> {job.salary}</li>
       </ul>
       <div className="button-container">
-        <button onClick={handleSaveJob} className="save-button">Save Job</button>
-        <button onClick={handleApplyNow} className="apply-button">Apply Now</button>
+        <button className="save-button">Save Job</button>
+        <button className="apply-button">Apply Now</button>
       </div>
     </div>
   );
-};
-
-JobDetails.propTypes = {
-  jobs: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      company: PropTypes.string.isRequired,
-      location: PropTypes.string.isRequired,
-      salary: PropTypes.string.isRequired,
-      icon: PropTypes.string
-    })
-  ).isRequired
 };
 
 export default JobDetails;

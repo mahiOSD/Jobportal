@@ -15,7 +15,7 @@ const JobEdit = ({ job, onSave, onCancel }) => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/jobs/update/${updatedJob._id}`,
+        `https://jobportal-black.vercel.app/api/jobs/update/${updatedJob._id}`,
         updatedJob
       );
       console.log('Updated job:', response.data);
@@ -132,12 +132,13 @@ JobEdit.propTypes = {
     _id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     companyName: PropTypes.string.isRequired,
-    salary: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
     jobType: PropTypes.string.isRequired,
+    salary: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     experienceLevel: PropTypes.string.isRequired,
-    requiredSkills: PropTypes.arrayOf(PropTypes.string).isRequired,
+    requiredSkills: PropTypes.string.isRequired,
   }).isRequired,
   onSave: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,

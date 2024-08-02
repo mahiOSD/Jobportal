@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Searchjob.css';
-import locationIcon from '/images/location-icon.jpg'; 
+import locationIcon from '/images/location-icon.jpg';
 
-const SearchJobs = ({ jobs }) => {
-  const navigate = useNavigate();
+const SearchJobs = () => {
+  const [jobs, setJobs] = useState([]);
   const [category, setCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredJobs, setFilteredJobs] = useState(jobs);
+  const [filteredJobs, setFilteredJobs] = useState([]);
+
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
+        setJobs(response.data);
+      } catch (error) {
+        console.error('Error fetching jobs', error);
+      }
+    };
+
+    fetchJobs();
+  }, []);
 
   useEffect(() => {
     const filterJobs = () => {
-      let filtered = jobs;
+      let filtered = Array.isArray(jobs) ? jobs : [];
       if (category && category !== 'all') {
         filtered = filtered.filter(job =>
           job.category.toLowerCase() === category.toLowerCase()
@@ -36,10 +49,6 @@ const SearchJobs = ({ jobs }) => {
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-  };
-
-  const handleJobClick = (jobId) => {
-    navigate(`/job/${jobId}`);
   };
 
   const handleClearClick = () => {
@@ -71,13 +80,14 @@ const SearchJobs = ({ jobs }) => {
             <option value="backend">Backend</option>
             <option value="fullstack">Fullstack</option>
             <option value="design">Design</option>
+            <option value="data science">Data Science</option>
           </select>
         </div>
       </div>
       <div className="job-list">
-        {filteredJobs.length > 0 ? (
+        {Array.isArray(filteredJobs) && filteredJobs.length > 0 ? (
           filteredJobs.map((job) => (
-            <div key={job.id} className="job-card" onClick={() => handleJobClick(job.id)}>
+            <div key={job._id} className="job-card">
               <div className="job-card-header">
                 <h3>{job.title}</h3>
                 <p className="job-location">
@@ -87,29 +97,18 @@ const SearchJobs = ({ jobs }) => {
               </div>
               <div className="job-card-body">
                 <p className="job-description">{job.description}</p>
-                <button className="more-details-button">More Details</button>
+                <Link to={`/job/${job._id}`} className="more-details-button">
+                  More Details
+                </Link>
               </div>
             </div>
           ))
         ) : (
-          <p>No jobs found</p>
+          <p>No jobs found matching your criteria.</p>
         )}
       </div>
     </div>
   );
-};
-
-SearchJobs.propTypes = {
-  jobs: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      company: PropTypes.string,
-      location: PropTypes.string,
-      category: PropTypes.string,
-      description: PropTypes.string,
-    })
-  ).isRequired,
 };
 
 export default SearchJobs;
