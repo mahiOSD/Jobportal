@@ -43,12 +43,7 @@ const Header = ({ user, setUser }) => {
                   My Jobs
                 </Link>
               </li>
-              <li>
-                <Link to="#" className="nav-link">
-                  <FontAwesomeIcon icon={faMoneyBillWave} className="nav-icon" />
-                  Salary estimate
-                </Link>
-              </li>
+              
               <li>
                 <Link to="/add-job" className="nav-link">
                   <FontAwesomeIcon icon={faPlusSquare} className="nav-icon" />
