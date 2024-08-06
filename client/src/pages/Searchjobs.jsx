@@ -1,28 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
-import axios from 'axios';
-import './Searchjob.css';
 import locationIcon from '/images/location-icon.jpg';
+import './Searchjob.css';
 
-const SearchJobs = () => {
-  const [jobs, setJobs] = useState([]);
+const SearchJobs = ({ jobs }) => {
   const [category, setCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredJobs, setFilteredJobs] = useState([]);
-
-  useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
-        setJobs(response.data);
-      } catch (error) {
-        console.error('Error fetching jobs', error);
-      }
-    };
-
-    fetchJobs();
-  }, []);
 
   useEffect(() => {
     const filterJobs = () => {
@@ -109,6 +95,21 @@ const SearchJobs = () => {
       </div>
     </div>
   );
+};
+
+SearchJobs.propTypes = {
+  jobs: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      company: PropTypes.string.isRequired,
+      description: PropTypes.string.isRequired,
+      location: PropTypes.string.isRequired,
+      category: PropTypes.string.isRequired,
+      salary: PropTypes.string.isRequired,
+      icon: PropTypes.string,
+    })
+  ).isRequired,
 };
 
 export default SearchJobs;

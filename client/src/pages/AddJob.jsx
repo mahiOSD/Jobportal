@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './AddJob.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddJob = ({ addJobToList }) => {
   const [newJob, setNewJob] = useState({
     title: '',
-    companyName: '',
+    company: '',
     description: '',
     location: '',
-    jobType: '',
     salary: '',
+    category: '', 
     date: '',
     experienceLevel: '',
     requiredSkills: '',
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,27 +26,27 @@ const AddJob = ({ addJobToList }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting job data:', newJob); 
     try {
       const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
         withCredentials: true,
       });
-      console.log(response.data);
+      console.log('Job added successfully:', response.data);
       addJobToList(response.data);
       setNewJob({
         title: '',
-        companyName: '',
+        company: '',
         description: '',
         location: '',
-        jobType: '',
         salary: '',
+        category: '', 
         date: '',
         experienceLevel: '',
         requiredSkills: '',
       });
-
-      window.location.href = '/search';
+      navigate('/jobs'); 
     } catch (error) {
-      console.error('Error adding job:', error);
+      console.error('Error adding job:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -55,8 +58,8 @@ const AddJob = ({ addJobToList }) => {
         <input type="text" name="title" value={newJob.title} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label>Company Name:</label>
-        <input type="text" name="companyName" value={newJob.companyName} onChange={handleChange} required />
+        <label>Company:</label>
+        <input type="text" name="company" value={newJob.company} onChange={handleChange} required />
       </div>
       <div className="form-group">
         <label>Description:</label>
@@ -67,16 +70,16 @@ const AddJob = ({ addJobToList }) => {
         <input type="text" name="location" value={newJob.location} onChange={handleChange} required />
       </div>
       <div className="form-group">
-        <label>Job Type:</label>
-        <input type="text" name="jobType" value={newJob.jobType} onChange={handleChange} required />
-      </div>
-      <div className="form-group">
         <label>Salary:</label>
         <input type="text" name="salary" value={newJob.salary} onChange={handleChange} required />
       </div>
       <div className="form-group">
+        <label>Category:</label>
+        <input type="text" name="category" value={newJob.category} onChange={handleChange} required />
+      </div>
+      <div className="form-group">
         <label>Date:</label>
-        <input type="text" name="date" value={newJob.date} onChange={handleChange} required />
+        <input type="date" name="date" value={newJob.date} onChange={handleChange} required />
       </div>
       <div className="form-group">
         <label>Experience Level:</label>
@@ -86,7 +89,7 @@ const AddJob = ({ addJobToList }) => {
         <label>Required Skills:</label>
         <input type="text" name="requiredSkills" value={newJob.requiredSkills} onChange={handleChange} required />
       </div>
-      <button type="submit" className="btn-save">Save</button>
+      <button type="submit">Add Job</button>
     </form>
   );
 };

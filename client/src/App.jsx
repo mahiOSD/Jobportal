@@ -42,7 +42,7 @@ const App = () => {
   const handleSave = async (updatedJob) => {
     try {
       const response = await axios.put(
-        `https://jobportal-black.vercel.app/api/jobs/update/${updatedJob._id}`,
+        `https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`,
         updatedJob
       );
       const updatedJobsList = jobsList.map((job) =>
@@ -50,7 +50,7 @@ const App = () => {
       );
       setJobsList(updatedJobsList);
       setEditingJob(null);
-      navigate('/my-jobs');
+      navigate('/jobs');
     } catch (error) {
       console.error('Error saving job:', error);
     }
@@ -63,7 +63,7 @@ const App = () => {
         newJob
       );
       setJobsList([...jobsList, response.data]);
-      navigate('/my-jobs');
+      navigate('/jobs');
     } catch (error) {
       console.error('Error adding job:', error);
     }
@@ -93,14 +93,14 @@ const App = () => {
     const defaultJob = {
       _id: '',
       title: '',
-      companyName: '',
+      company: '',
       description: '',
       location: '',
-      jobType: '',
+      category: '',
       salary: '',
       date: '',
-      experienceLevel: '',
       requiredSkills: '',
+      experienceLevel: '',
     };
     setEditingJob({ ...defaultJob, ...job });
   };
@@ -117,10 +117,10 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/jobs" element={<PrivateRoute user={user}><JobList jobs={jobsList} onEdit={handleEditJob} onDelete={handleDeleteJob} /></PrivateRoute>} />
+        <Route path="/add-job" element={<PrivateRoute user={user}><AddJob addJobToList={handleAddJob} /></PrivateRoute>} />
         {editingJob && (
           <Route path="/edit-job" element={<PrivateRoute user={user}><JobEdit job={editingJob} onSave={handleSave} onCancel={() => setEditingJob(null)} /></PrivateRoute>} />
         )}
-        <Route path="/add-job" element={<PrivateRoute user={user}><AddJob onAdd={handleAddJob} /></PrivateRoute>} />
       </Routes>
     </div>
   );
