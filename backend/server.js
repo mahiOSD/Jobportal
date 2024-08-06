@@ -9,8 +9,8 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['https://jobportal-nmce.vercel.app'];
+//const allowedOrigins = ['http://localhost:5173'];
 
 app.use(cors({
   origin: (origin, callback) => {
