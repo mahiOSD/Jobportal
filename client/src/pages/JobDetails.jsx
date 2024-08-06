@@ -7,6 +7,7 @@ import locationIcon from '/images/location-icon.jpg';
 const JobDetails = () => {
   const { jobId } = useParams();
   const [job, setJob] = useState(null);
+  const [error] = useState('');
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -14,12 +15,17 @@ const JobDetails = () => {
         const response = await axios.get(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
         setJob(response.data);
       } catch (error) {
-        console.error('Error fetching job details', error);
+        console.error('Error fetching job details:', error);
+        
       }
     };
 
     fetchJob();
   }, [jobId]);
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   if (!job) {
     return <div>Loading job details...</div>;
@@ -28,8 +34,8 @@ const JobDetails = () => {
   return (
     <div className="job-details">
       <h2>{job.title}</h2>
-      {job.icon && <img src={job.icon} alt={`${job.title} icon`} className="job-icon" />}
-      <p>{job.description}</p>
+      {job.icon ? <img src={job.icon} alt={`${job.title} icon`} className="job-icon" /> : null}
+      <p>{job.description || 'Description not available'}</p>
       <ul>
         <li><strong>Company:</strong> {job.company}</li>
         <li>
@@ -38,11 +44,11 @@ const JobDetails = () => {
           {job.location}
         </li>
         <li><strong>Salary:</strong> {job.salary}</li>
+        <li><strong>Category:</strong> {job.category}</li>
+        <li><strong>Date:</strong> {job.date}</li>
+        <li><strong>Experience Level:</strong> {job.experienceLevel}</li>
+        <li><strong>Required Skills:</strong> {job.requiredSkills.join(', ')}</li>
       </ul>
-      <div className="button-container">
-        <button className="save-button">Save Job</button>
-        <button className="apply-button">Apply Now</button>
-      </div>
     </div>
   );
 };

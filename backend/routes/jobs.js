@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+import Job from '../models/job.js'; 
 
 const router = express.Router();
 
@@ -13,8 +14,10 @@ let exampleJobs = [
     salary: '৳80,000 - ৳100,000 per year',
     icon: '/images/software-engineer-icon.png',
     category: 'backend',
+    date: '2024-07-01',
+    requiredSkills: ['JavaScript', 'Node.js', 'React'],
+    experienceLevel: 'Mid-level',
   },
-  
   {
     _id: '2',
     title: 'Data Scientist',
@@ -24,6 +27,9 @@ let exampleJobs = [
     salary: '৳90,000 - ৳110,000 per year',
     icon: '/images/data-scientist-icon.jpg',
     category: 'data science',
+    date: '2024-07-02',
+    requiredSkills: ['Python', 'Machine Learning', 'Data Analysis'],
+    experienceLevel: 'Senior',
   },
   {
     _id: '3',
@@ -34,6 +40,9 @@ let exampleJobs = [
     salary: '৳60,000 - ৳80,000 per year',
     icon: '/images/web-development-icon.png',
     category: 'design',
+    date: '2024-07-03',
+    requiredSkills: ['HTML', 'CSS', 'JavaScript'],
+    experienceLevel: 'Mid-level',
   },
   {
     _id: '4',
@@ -44,6 +53,9 @@ let exampleJobs = [
     salary: '৳50,000 - ৳70,000 per year',
     icon: '/images/software-developer-icon.png',
     category: 'frontend',
+    date: '2024-07-04',
+    requiredSkills: ['JavaScript', 'React', 'HTML'],
+    experienceLevel: 'Entry-level',
   },
   {
     _id: '5',
@@ -54,6 +66,9 @@ let exampleJobs = [
     salary: '৳45,000 - ৳65,000 per year',
     icon: '/images/web-developer-icon.png',
     category: 'frontend',
+    date: '2024-07-05',
+    requiredSkills: ['HTML', 'CSS', 'JavaScript'],
+    experienceLevel: 'Entry-level',
   },
   {
     _id: '6',
@@ -64,6 +79,9 @@ let exampleJobs = [
     salary: '৳100,000 - ৳130,000 per year',
     icon: '/images/Backend.jpg',
     category: 'backend',
+    date: '2024-07-06',
+    requiredSkills: ['Node.js', 'Express', 'MongoDB'],
+    experienceLevel: 'Senior',
   },
   {
     _id: '7',
@@ -74,6 +92,9 @@ let exampleJobs = [
     salary: '৳90,000 - ৳120,000 per year',
     icon: '/images/Full stack.jpg',
     category: 'fullstack',
+    date: '2024-07-07',
+    requiredSkills: ['JavaScript', 'Node.js', 'React'],
+    experienceLevel: 'Mid-level',
   },
   {
     _id: '8',
@@ -84,6 +105,9 @@ let exampleJobs = [
     salary: '৳70,000 - ৳90,000 per year',
     icon: '/images/UIUX-Designer.png',
     category: 'design',
+    date: '2024-07-08',
+    requiredSkills: ['Adobe XD', 'Sketch', 'Figma'],
+    experienceLevel: 'Mid-level',
   },
   {
     _id: '9',
@@ -94,6 +118,9 @@ let exampleJobs = [
     salary: '৳60,000 - ৳80,000 per year',
     icon: '/images/Frontend.jpg',
     category: 'frontend',
+    date: '2024-07-09',
+    requiredSkills: ['HTML', 'CSS', 'JavaScript'],
+    experienceLevel: 'Mid-level',
   },
   {
     _id: '10',
@@ -104,6 +131,9 @@ let exampleJobs = [
     salary: '৳45,000 - ৳65,000 per year',
     icon: '/images/back-end-developer.jpg',
     category: 'backend',
+    date: '2024-07-10',
+    requiredSkills: ['Node.js', 'Express', 'MongoDB'],
+    experienceLevel: 'Entry-level',
   },
   {
     _id: '11',
@@ -114,6 +144,9 @@ let exampleJobs = [
     salary: '৳50,000 - ৳70,000 per year',
     icon: '/images/Junior-Frontend.png',
     category: 'frontend',
+    date: '2024-07-11',
+    requiredSkills: ['HTML', 'CSS', 'JavaScript'],
+    experienceLevel: 'Entry-level',
   },
   {
     _id: '12',
@@ -124,6 +157,9 @@ let exampleJobs = [
     salary: '৳100,000 - ৳130,000 per year',
     icon: '/images/Senior-Frontend.png',
     category: 'frontend',
+    date: '2024-07-12',
+    requiredSkills: ['JavaScript', 'React', 'CSS'],
+    experienceLevel: 'Senior',
   },
   {
     _id: '13',
@@ -134,14 +170,15 @@ let exampleJobs = [
     salary: '৳120,000 - ৳150,000 per year',
     icon: '/images/Senior-Full stack.avif',
     category: 'fullstack',
+    date: '2024-07-13',
+    requiredSkills: ['JavaScript', 'Node.js', 'React'],
+    experienceLevel: 'Senior',
   },
-
 ];
 
 router.get('/', (req, res) => {
   res.json(exampleJobs);
 });
-
 
 router.get('/:id', (req, res) => {
   const job = exampleJobs.find(job => job._id === req.params.id);
@@ -151,13 +188,38 @@ router.get('/:id', (req, res) => {
   res.json(job);
 });
 
-
 router.post('/', (req, res) => {
   const newJob = { _id: uuidv4(), ...req.body };
   exampleJobs.push(newJob);
   res.status(201).json(newJob);
 });
 
+router.post('/add', async (req, res) => {
+  const { title, company, description, location, salary, category, date, experienceLevel, requiredSkills } = req.body;
+
+  if (!title || !company || !description || !location || !salary || !category || !date || !experienceLevel || !requiredSkills) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+    const newJob = new Job({
+      title,
+      company,
+      description,
+      location,
+      salary,
+      category,
+      date,
+      experienceLevel,
+      requiredSkills
+    });
+    const savedJob = await newJob.save();
+    res.json(savedJob);
+  } catch (error) {
+    console.error('Error saving job:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 router.put('/:id', (req, res) => {
   const index = exampleJobs.findIndex(job => job._id === req.params.id);
@@ -167,7 +229,6 @@ router.put('/:id', (req, res) => {
   exampleJobs[index] = { ...exampleJobs[index], ...req.body };
   res.json(exampleJobs[index]);
 });
-
 
 router.delete('/:id', (req, res) => {
   const index = exampleJobs.findIndex(job => job._id === req.params.id);
@@ -179,3 +240,4 @@ router.delete('/:id', (req, res) => {
 });
 
 export default router;
+

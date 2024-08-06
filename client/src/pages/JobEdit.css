@@ -16,13 +16,27 @@
   font-weight: bold;
 }
 
-.job-edit input {
+.job-edit input, .job-edit textarea {
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid black; 
+  border-radius: 4px; 
+}
+
+.job-edit textarea {
+  width: 100%; 
+  min-height: 100px; 
 }
 
 .job-edit button {
   padding: 10px;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 10px; 
+}
+
+.btn-save {
+  margin-right: 10px; 
+}
+
+.btn-cancel {
+  margin-right: 0px;
 }

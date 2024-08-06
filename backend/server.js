@@ -10,7 +10,19 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
+const allowedOrigins = ['https://jobportal-nmce.vercel.app'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -23,8 +35,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 
 app.use('/api/auth', authRouter);
 app.use('/api/jobs', jobsRouter);
-
-//app.get('/', (req, res) => res.json({ message: 'hello world' }));
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);

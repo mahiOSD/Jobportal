@@ -1,22 +1,28 @@
-.job-list {
+.job-list-container {
+  width: 100%;
+  margin: 0 auto;
   padding: 20px;
-  overflow-x: auto;
 }
 
-.jobs-table {
+.job-list-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.job-list-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 1000px; 
 }
 
-.jobs-table th,
-.jobs-table td {
+.job-list-table th,
+.job-list-table td {
   border: 1px solid rgba(0, 0, 0, 0.295); 
   padding: 8px;
   text-align: center;
 }
 
-.jobs-table th {
+.job-list-table th {
   background-color: #f2f2f2;
 }
 
@@ -91,3 +97,5 @@
 .job-delete button:hover {
   background-color: #c82333;
 }
+
+
