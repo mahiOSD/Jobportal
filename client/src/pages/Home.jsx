@@ -6,7 +6,11 @@ import './Home.css';
 const Home = () => {
   return (
     <div className="home">
-    
+      <video autoPlay loop muted playsInline className="background-video">
+        <source src="/background-video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
       <div className="home-banner">
         <h1>The Easiest Way to Get Your New Job</h1>
         <p>Your one-stop destination for finding your dream job</p>

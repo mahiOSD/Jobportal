@@ -6,6 +6,15 @@
   color: white;
 }
 
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
 .home-header {
   background: #f8f9fa;
   padding: 20px;
@@ -86,8 +95,8 @@
 .home-banner {
   text-align: center;
   padding: 53px 50px;
-  background: url('/banner.jpg') no-repeat center center/cover;
-  background-size: cover;
+  /*background: url('/banner.jpg') no-repeat center center/cover;
+  background-size: cover;*/
   color: white;
 }
 

@@ -1,10 +1,7 @@
-//login.jsx
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'; // Import PropTypes
 import './Login.css';
 
 const Login = ({ setUser }) => {
@@ -18,11 +15,11 @@ const Login = ({ setUser }) => {
     setError(''); // Clear previous errors
 
     try {
-      const response = await axios.post(
-        'https://jobportal-black.vercel.app/api/auth/login',
-        { email, password },
-        { withCredentials: true } // Include credentials
-      );
+       //const response = await axios.post('http://localhost:5001/api/auth/login', {
+      const response = await axios.post('https://jobportal-black.vercel.app/api/auth/login', {
+        email,
+        password,
+      });
 
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
@@ -75,8 +72,9 @@ const Login = ({ setUser }) => {
   );
 };
 
+// Add PropTypes validation
 Login.propTypes = {
-  setUser: PropTypes.func.isRequired,
+  setUser: PropTypes.func.isRequired, // Validate setUser as a required function
 };
 
 export default Login;
