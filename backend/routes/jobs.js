@@ -1,8 +1,10 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import Job from '../models/job.js'; 
+import multer from 'multer';
 
 const router = express.Router();
+const upload = multer({ dest: 'uploads/' });
 
 let exampleJobs = [
   {
@@ -176,6 +178,8 @@ let exampleJobs = [
   },
 ];
 
+let applications = [];
+
 router.get('/', (req, res) => {
   res.json(exampleJobs);
 });
@@ -192,33 +196,6 @@ router.post('/', (req, res) => {
   const newJob = { _id: uuidv4(), ...req.body };
   exampleJobs.push(newJob);
   res.status(201).json(newJob);
-});
-
-router.post('/add', async (req, res) => {
-  const { title, company, description, location, salary, category, date, experienceLevel, requiredSkills } = req.body;
-
-  if (!title || !company || !description || !location || !salary || !category || !date || !experienceLevel || !requiredSkills) {
-    return res.status(400).json({ error: 'All fields are required' });
-  }
-
-  try {
-    const newJob = new Job({
-      title,
-      company,
-      description,
-      location,
-      salary,
-      category,
-      date,
-      experienceLevel,
-      requiredSkills
-    });
-    const savedJob = await newJob.save();
-    res.json(savedJob);
-  } catch (error) {
-    console.error('Error saving job:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
 });
 
 router.put('/:id', (req, res) => {
@@ -239,5 +216,26 @@ router.delete('/:id', (req, res) => {
   res.json({ message: 'Job deleted successfully' });
 });
 
-export default router;
+router.post('/applications', upload.single('resume'), (req, res) => {
+  const { jobId, applicantName, applicantEmail, applicantPhone, applicantAddress, coverLetter } = req.body;
 
+  if (!jobId || !applicantName || !applicantEmail || !applicantPhone || !applicantAddress || !coverLetter || !req.file) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  const newApplication = {
+    id: uuidv4(),
+    jobId,
+    applicantName,
+    applicantEmail,
+    applicantPhone,
+    applicantAddress,
+    coverLetter,
+    resume: req.file.path
+  };
+
+  applications.push(newApplication);
+  res.status(201).json(newApplication);
+});
+
+export default router;

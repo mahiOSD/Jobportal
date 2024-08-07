@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+
 import Header from './components/Header';
 import Home from './pages/Home';
 import SearchJobs from './pages/Searchjobs';
@@ -13,6 +14,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import PrivateRoute from './components/PrivateRoute';
 import JobList from './pages/JobList';
+import ApplicationForm from './pages/ApplicationForm'; 
 import './App.css';
 
 const App = () => {
@@ -41,10 +43,7 @@ const App = () => {
 
   const handleSave = async (updatedJob) => {
     try {
-      const response = await axios.put(
-        `https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`,
-        updatedJob
-      );
+      const response = await axios.put(`https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`, updatedJob);
       const updatedJobsList = jobsList.map((job) =>
         job._id === updatedJob._id ? response.data : job
       );
@@ -58,10 +57,7 @@ const App = () => {
 
   const handleAddJob = async (newJob) => {
     try {
-      const response = await axios.post(
-        'https://jobportal-black.vercel.app/api/jobs/add',
-        newJob
-      );
+      const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob);
       setJobsList([...jobsList, response.data]);
       navigate('/jobs');
     } catch (error) {
@@ -105,6 +101,13 @@ const App = () => {
     setEditingJob({ ...defaultJob, ...job });
   };
 
+  const ApplicationFormPage = () => {
+    const { jobId } = useParams();
+    const navigate = useNavigate();
+
+    return <ApplicationForm jobId={jobId} onClose={() => navigate(`/job/${jobId}`)} />;
+  };
+
   return (
     <div className="app-container">
       <Header user={user} onLogout={handleLogout} />
@@ -112,6 +115,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<SearchJobs jobs={jobsList} />} />
         <Route path="/job/:jobId" element={<JobDetails />} />
+        <Route path="/apply/:jobId" element={<ApplicationFormPage />} />
         <Route path="/login" element={<Login onLogin={handleLogin} setUser={setUser} />} />
         <Route path="/signup" element={<Signup setUser={setUser} />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
