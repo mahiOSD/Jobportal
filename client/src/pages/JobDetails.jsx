@@ -9,6 +9,7 @@ const JobDetails = () => {
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [error, setError] = useState('');
+  
 
   useEffect(() => {
     const fetchJob = async () => {
