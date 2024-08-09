@@ -2,11 +2,12 @@ import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import Job from '../models/job.js'; 
 import Application from '../models/Application.js';
-
-
-const router = express.Router();
 import multer from 'multer';
-const upload = multer({ dest: 'uploads/' });
+const router = express.Router();
+
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 let exampleJobs = [
   {
@@ -242,7 +243,7 @@ router.post('/applications', upload.single('resume'), async (req, res) => {
       applicantPhone,
       applicantAddress,
       coverLetter,
-      resume: resume.filename,  
+      resume: resume.buffer,  
     });
     const savedApplication = await newApplication.save();
     res.status(201).json(savedApplication);
@@ -251,7 +252,6 @@ router.post('/applications', upload.single('resume'), async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 router.put('/:id', (req, res) => {
   const index = exampleJobs.findIndex(job => job._id === req.params.id);
