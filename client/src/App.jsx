@@ -33,8 +33,8 @@ const App = () => {
 
     const fetchJobs = async () => {
       try {
-        //const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
-        const response = await axios.get('http://localhost:5000/api/jobs');
+        const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
+        //const response = await axios.get('http://localhost:5000/api/jobs');
         setJobsList(response.data);
       } catch (error) {
         console.error('Error fetching jobs:', error.response ? error.response.data : error.message);
@@ -47,8 +47,8 @@ const App = () => {
   const handleSave = async (updatedJob) => {
     try {
       const response = await axios.put(
-        //`https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`,
-        `http://localhost:5000/api/jobs/${updatedJob._id}`,
+        `https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`,
+        //`http://localhost:5000/api/jobs/${updatedJob._id}`,
         updatedJob
       );
       const updatedJobsList = jobsList.map((job) =>
@@ -65,8 +65,8 @@ const App = () => {
   const handleAddJob = async (newJob) => {
     try {
       const response = await axios.post(
-        //'https://jobportal-black.vercel.app/api/jobs/add',
-        'http://localhost:5000/api/jobs/add',
+        'https://jobportal-black.vercel.app/api/jobs/add',
+        //'http://localhost:5000/api/jobs/add',
         newJob
       );
       setJobsList([...jobsList, response.data]);
@@ -78,8 +78,8 @@ const App = () => {
 
   const handleDeleteJob = async (jobId) => {
     try {
-      //await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
-      await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
+      await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
+      //await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
       setJobsList(jobsList.filter((job) => job._id !== jobId));
     } catch (error) {
       console.error('Error deleting job:', error);
