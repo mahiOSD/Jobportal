@@ -1,10 +1,11 @@
+//Signup.jsx
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Signup.css'; 
 
-const Signup = () => {
+const Signup = ({ setUser }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -13,24 +14,25 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const userData = {
+      name,
+      phone,
+      email,
+      password,
+    };
+    
     try {
-      
-      //const response = await axios.post('http://localhost:5001/api/auth/signup', {
-
-      const response = await axios.post('https://jobportal-black.vercel.app/api/auth/signup', {
-        name,
-        phone,
-        email,
-        password,
-      });
+      const response = await axios.post('http://localhost:5000/api/auth/signup', userData);
       if (response.data) {
         // Save token and user data to localStorage
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        // Call setUser to update the user state
+        setUser(response.data.user);
         // Navigate to home page
-        //location.reload();
         navigate('/');
-        location.reload();
+        // Reload the page to reset the state (if needed)
+        window.location.reload();
       }
     } catch (error) {
       console.error('Error registering user:', error);
@@ -88,4 +90,5 @@ const Signup = () => {
 Signup.propTypes = {
   setUser: PropTypes.func.isRequired,
 };
+
 export default Signup;

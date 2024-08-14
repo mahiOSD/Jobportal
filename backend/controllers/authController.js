@@ -1,8 +1,10 @@
-
+//authController.js
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+//import ProfileUser from '../models/ProfileUser.js';
 import User from '../models/User.js';
 import transporter from '../config/nodemailerConfig.js';
+
 
 export const registerUser = async (req, res) => {
   const { name, phone, email, password } = req.body;
@@ -46,7 +48,6 @@ export const loginUser = async (req, res) => {
     res.status(500).json({ message: 'Error logging in', error: error.message });
   }
 };
-
 
 export const sendResetLink = async (req, res) => {
   const { email } = req.body;
@@ -103,3 +104,29 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ message: 'Error resetting password', error: error.message });
   }
 };
+export const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming user ID is stored in the request object after authentication
+    const user = await User.findById(userId).select('-password'); // Exclude the password field
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+/*
+export const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming user ID is stored in the request object after authentication
+    const user = await ProfileUser.findById(userId).select('-password'); // Exclude the password field
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+*/
