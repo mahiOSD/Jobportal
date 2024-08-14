@@ -271,4 +271,6 @@ router.delete('/:id', (req, res) => {
   res.json({ message: 'Job deleted successfully' });
 });
 
+
 export default router;
+
