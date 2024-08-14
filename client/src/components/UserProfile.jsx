@@ -1,18 +1,40 @@
-import React, { useState } from 'react';
+//UserProfile.jsx:
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faUser, faTachometerAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import './UserProfile.css';
+import axios from 'axios';
 
 const UserProfile = ({ user, setUser }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [profile, setProfile] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get('/api/auth/profile', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}` // Adjust this if you use a different method for auth
+          }
+        });
+        setProfile(res.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token'); // Remove token on logout
     navigate('/');
+    window.location.reload(); // Ensures the state is completely reset
   };
 
   const toggleDropdown = () => {
@@ -22,7 +44,7 @@ const UserProfile = ({ user, setUser }) => {
   return (
     <div className="user-profile">
       <button onClick={toggleDropdown} className="user-profile-button">
-        {user.name} <FontAwesomeIcon icon={faCaretDown} />
+        {user?.name || 'User'} <FontAwesomeIcon icon={faCaretDown} />
       </button>
       {dropdownVisible && (
         <div className="user-profile-dropdown">
@@ -42,7 +64,7 @@ const UserProfile = ({ user, setUser }) => {
 };
 
 UserProfile.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   setUser: PropTypes.func.isRequired,
 };
 

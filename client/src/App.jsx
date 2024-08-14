@@ -1,6 +1,9 @@
+//App.jsx:
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+
+import MainLayout from './components/MainLayout'; // Adjust the import path as needed
 
 import Header from './components/Header';
 import Home from './pages/Home';
@@ -13,6 +16,8 @@ import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import PrivateRoute from './components/PrivateRoute';
+//import UserProfile from './components/UserProfile';
+import ApplicationForm from './pages/ApplicationForm'; import Profile from './components/Profile';
 import JobList from './pages/JobList';
 import ApplicationForm from './pages/ApplicationForm'; 
 import './App.css';
@@ -31,7 +36,10 @@ const App = () => {
 
     const fetchJobs = async () => {
       try {
+
         const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
+        //const response = await axios.get('http://localhost:5000/api/jobs');
+
         setJobsList(response.data);
       } catch (error) {
         console.error('Error fetching jobs:', error.response ? error.response.data : error.message);
@@ -40,10 +48,18 @@ const App = () => {
 
     fetchJobs();
   }, []);
-
+  
   const handleSave = async (updatedJob) => {
     try {
+
+     // const response = await axios.put(
+       // `https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`,
+        //`http://localhost:5000/api/jobs/${updatedJob._id}`,
+       // updatedJob
+     // );
+
       const response = await axios.put(`https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`, updatedJob);
+
       const updatedJobsList = jobsList.map((job) =>
         job._id === updatedJob._id ? response.data : job
       );
@@ -57,7 +73,12 @@ const App = () => {
 
   const handleAddJob = async (newJob) => {
     try {
-      const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob);
+
+      const response = await axios.post(
+        'https://jobportal-black.vercel.app/api/jobs/add',
+        //'http://localhost:5000/api/jobs/add',
+        newJob
+      );
       setJobsList([...jobsList, response.data]);
       navigate('/jobs');
     } catch (error) {
@@ -67,7 +88,12 @@ const App = () => {
 
   const handleDeleteJob = async (jobId) => {
     try {
+
+      
+      //await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
+
       await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
+
       setJobsList(jobsList.filter((job) => job._id !== jobId));
     } catch (error) {
       console.error('Error deleting job:', error);
@@ -77,12 +103,15 @@ const App = () => {
   const handleLogin = (user) => {
     setUser(user);
     localStorage.setItem('user', JSON.stringify(user));
+    navigate('/');
   };
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     navigate('/');
+    window.location.reload(); // Add this line to ensure the state is completely reset
   };
 
   const handleEditJob = (job) => {
@@ -100,6 +129,13 @@ const App = () => {
     };
     setEditingJob({ ...defaultJob, ...job });
   };
+  
+  const ApplicationFormPage = () => {
+    const { jobId } = useParams();
+    const navigate = useNavigate();
+
+    return <ApplicationForm jobId={jobId} onClose={() => navigate(`/job/${jobId}`)} />;
+  };
 
   const ApplicationFormPage = () => {
     const { jobId } = useParams();
@@ -110,7 +146,7 @@ const App = () => {
 
   return (
     <div className="app-container">
-      <Header user={user} onLogout={handleLogout} />
+      <Header user={user} setUser={setUser} onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<SearchJobs jobs={jobsList} />} />
@@ -122,10 +158,12 @@ const App = () => {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
         <Route path="/jobs" element={<PrivateRoute user={user}><JobList jobs={jobsList} onEdit={handleEditJob} onDelete={handleDeleteJob} /></PrivateRoute>} />
         <Route path="/add-job" element={<PrivateRoute user={user}><AddJob addJobToList={handleAddJob} /></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute user={user}><Profile user={user} /></PrivateRoute>} />
         {editingJob && (
           <Route path="/edit-job" element={<PrivateRoute user={user}><JobEdit job={editingJob} onSave={handleSave} onCancel={() => setEditingJob(null)} /></PrivateRoute>} />
         )}
       </Routes>
+
     </div>
   );
 };
