@@ -22,7 +22,8 @@ const Signup = ({ setUser }) => {
     };
     
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', userData);
+      //const response = await axios.post('http://localhost:5000/api/auth/signup', userData);
+      const response = await axios.post('https://jobportal-black.vercel.app/api/auth/signup', userData);
       if (response.data) {
         // Save token and user data to localStorage
         localStorage.setItem('token', response.data.token);
