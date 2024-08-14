@@ -1,5 +1,8 @@
+
 //Application.js:
 import mongoose from 'mongoose';
+
+
 const applicationSchema = new mongoose.Schema({
   jobId: {
     type: String,  
@@ -36,4 +39,4 @@ const applicationSchema = new mongoose.Schema({
 });
 
 const Application = mongoose.model('Application', applicationSchema);
-export default Application;
+
