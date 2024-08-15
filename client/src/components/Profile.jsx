@@ -46,12 +46,12 @@ const Profile = ({ user, setUser }) => {
 
     const formData = new FormData();
     formData.append('profilePicture', profilePicture);
-    formData.append('userId', profile._id); // Use profile._id to get the user ID
+    formData.append('userId', profile._id);
 
     try {
       const response = await axios.post(
-  'https://jobportal-black.vercel.app/api/profile/uploadProfilePicture',
-  formData,
+        'https://jobportal-black.vercel.app/api/profile/uploadProfilePicture',
+        formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -61,7 +61,6 @@ const Profile = ({ user, setUser }) => {
       );
 
       console.log('Profile picture uploaded successfully:', response.data);
-      // Update the profile state with the new profile picture URL
       setProfile((prevProfile) => ({
         ...prevProfile,
         profilePicture: response.data.profilePicture,
@@ -76,9 +75,9 @@ const Profile = ({ user, setUser }) => {
       <h1>My Profile</h1>
       <div className="profile-details">
         <img
-        src={https://jobportal-black.vercel.app${profile.profilePicture}}
-  alt="Profile"
-  />
+          src={`https://jobportal-black.vercel.app${profile.profilePicture}`}
+          alt="Profile"
+        />
         <p>
           <strong>Name:</strong> {profile.name || 'N/A'}
         </p>
