@@ -1,21 +1,26 @@
+//backend/server.js:
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import path from 'path';
 import dotenv from 'dotenv';
 import jobsRouter from './routes/jobs.js';
 import authRouter from './routes/auth.js';
+import profileRouter from './routes/profile.js'; 
+
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-const allowedOrigins = ['https://jobportal-nmce.vercel.app'];
-//const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['https://jobportal-nmce.vercel.app', 'https://myjobportal.com'];
+//const allowedOrigins = ['http://localhost:5173', 'https://myjobportal.com'];
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (like mobile apps or curl requests)
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -25,6 +30,12 @@ app.use(cors({
 }));
 
 app.use(express.json());
+// Serving static files from the uploads directory
+//app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
+app.use('/uploads', express.static('uploads'));
+
+// Ensure this is being set correctly
+//const filePath = `/uploads/profile_pictures/${req.file.filename}`;
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -36,7 +47,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 
 app.use('/api/auth', authRouter);
 app.use('/api/jobs', jobsRouter);
-
+app.use('/api/profile', profileRouter);
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });

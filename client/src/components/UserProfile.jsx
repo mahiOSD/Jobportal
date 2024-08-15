@@ -1,4 +1,3 @@
-//UserProfile.jsx:
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,12 +16,12 @@ const UserProfile = ({ user, setUser }) => {
       try {
         const res = await axios.get('/api/auth/profile', {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` // Adjust this if you use a different method for auth
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
           }
         });
         setProfile(res.data);
       } catch (err) {
-        console.error(err);
+        console.error('Error fetching profile:', err);
       }
     };
 
@@ -32,9 +31,9 @@ const UserProfile = ({ user, setUser }) => {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    localStorage.removeItem('token'); // Remove token on logout
+    localStorage.removeItem('token');
     navigate('/');
-    window.location.reload(); // Ensures the state is completely reset
+    window.location.reload();
   };
 
   const toggleDropdown = () => {
@@ -44,7 +43,12 @@ const UserProfile = ({ user, setUser }) => {
   return (
     <div className="user-profile">
       <button onClick={toggleDropdown} className="user-profile-button">
-        {user?.name || 'User'} <FontAwesomeIcon icon={faCaretDown} />
+        <img 
+          src={profile.profilePicture || 'default-avatar.png'} 
+          alt="User Profile" 
+          className="profile-icon" 
+        />
+        {profile.name || 'User'} <FontAwesomeIcon icon={faCaretDown} />
       </button>
       {dropdownVisible && (
         <div className="user-profile-dropdown">

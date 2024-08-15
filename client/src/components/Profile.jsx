@@ -1,10 +1,10 @@
-// Profile.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Profile.css';
 
-const Profile = ({ user }) => {
+const Profile = ({ user, setUser }) => {
   const [profile, setProfile] = useState(user || {});
+  const [profilePicture, setProfilePicture] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -18,8 +18,8 @@ const Profile = ({ user }) => {
 
           const res = await axios.get('/api/auth/profile', {
             headers: {
-              Authorization: `Bearer ${token}`
-            }
+              Authorization: `Bearer ${token}`,
+            },
           });
 
           setProfile(res.data);
@@ -32,14 +32,74 @@ const Profile = ({ user }) => {
     fetchProfile();
   }, [user]);
 
+  const handleProfilePictureChange = (e) => {
+    setProfilePicture(e.target.files[0]);
+  };
+
+  const handleProfilePictureUpload = async (e) => {
+    e.preventDefault();
+
+    if (!profilePicture) {
+      console.error('No profile picture selected');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('profilePicture', profilePicture);
+    formData.append('userId', profile._id); // Use profile._id to get the user ID
+
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/api/profile/uploadProfilePicture',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      console.log('Profile picture uploaded successfully:', response.data);
+      // Update the profile state with the new profile picture URL
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        profilePicture: response.data.profilePicture,
+      }));
+    } catch (error) {
+      console.error('Failed to upload profile picture:', error);
+    }
+  };
+
   return (
     <div className="profile">
       <h1>My Profile</h1>
       <div className="profile-details">
-        <p><strong>Name:</strong> {profile.name || 'N/A'}</p>
-        <p><strong>Email:</strong> {profile.email || 'N/A'}</p>
-        <p><strong>Mobile Number:</strong> {profile.mobileNumber || 'N/A'}</p>
+        <img
+          src={`http://localhost:5000${profile.profilePicture}`}
+          alt="Profile"
+        />
+
+        <p>
+          <strong>Name:</strong> {profile.name || 'N/A'}
+        </p>
+        <p>
+          <strong>Email:</strong> {profile.email || 'N/A'}
+        </p>
+        <p>
+          <strong>Mobile Number:</strong> {profile.phone || 'N/A'}
+        </p>
       </div>
+
+      <h2>Upload Profile Picture</h2>
+      <form onSubmit={handleProfilePictureUpload}>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleProfilePictureChange}
+        />
+        <button type="submit">Upload</button>
+      </form>
     </div>
   );
 };
