@@ -75,7 +75,7 @@ const Profile = ({ user, setUser }) => {
       <h1>My Profile</h1>
       <div className="profile-details">
         <img
-          src={`https://jobportal-black.vercel.app${profile.profilePicture}`}
+          src={https://jobportal-black.vercel.app/api/profile/${profile.profilePicture}}
           alt="Profile"
         />
         <p>
