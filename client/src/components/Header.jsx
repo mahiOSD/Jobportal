@@ -6,6 +6,8 @@ import { faSearch, faBriefcase, faPlusSquare } from '@fortawesome/free-solid-svg
 import './Header.css';
 import axios from 'axios';
 
+const BASE_URL = 'https://jobportal-black.vercel.app';
+
 const Header = ({ user, setUser }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [profilePicture, setProfilePicture] = useState(null);
@@ -15,14 +17,20 @@ const Header = ({ user, setUser }) => {
     const fetchProfilePicture = async () => {
       if (user && user._id) {
         try {
-          const response = await axios.get(`https://jobportal-black.vercel.app/api/profile/${user._id}`, {
+          const response = await axios.get(`${BASE_URL}/api/profile/${user._id}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           });
-          setProfilePicture(response.data.profilePicture);
+
+          const profilePicUrl = response.data.profilePicture
+            ? `${BASE_URL}${response.data.profilePicture}`
+            : '/default-avatar.png';
+
+          setProfilePicture(profilePicUrl);
         } catch (error) {
           console.error('Error fetching profile picture:', error);
+          setProfilePicture('/default-avatar.png'); 
         }
       }
     };
@@ -76,7 +84,7 @@ const Header = ({ user, setUser }) => {
               </li>
               <li className="profile-icon" onClick={toggleDropdown}>
                 <img
-                  src={profilePicture || '/default-avatar.png'}
+                  src={profilePicture}
                   alt="Profile Icon"
                   className="profile-picture-icon"
                 />
