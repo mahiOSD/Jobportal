@@ -1,17 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faBriefcase, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
+import axios from 'axios';
 
 const Header = ({ user, setUser }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [profilePicture, setProfilePicture] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfilePicture = async () => {
+      if (user && user._id) {
+        try {
+          const response = await axios.get(`https://jobportal-black.vercel.app/api/profile/${user._id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+          setProfilePicture(response.data.profilePicture);
+        } catch (error) {
+          console.error('Error fetching profile picture:', error);
+        }
+      }
+    };
+
+    fetchProfilePicture();
+  }, [user]);
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     navigate('/');
   };
 
@@ -54,7 +76,7 @@ const Header = ({ user, setUser }) => {
               </li>
               <li className="profile-icon" onClick={toggleDropdown}>
                 <img
-                  src={`https://jobportal-black.vercel.app${user.profilePicture || '/default-avatar.png'}`}
+                  src={profilePicture || '/default-avatar.png'}
                   alt="Profile Icon"
                   className="profile-picture-icon"
                 />
