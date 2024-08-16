@@ -61,24 +61,18 @@ const Profile = ({ user, setUser }) => {
         }
       );
 
-      console.log('Profile picture uploaded successfully:', response.data);
-
       const updatedProfile = {
         ...profile,
         profilePicture: response.data.profilePicture,
       };
 
-      
       setProfile(updatedProfile);
 
-      
       const storedUser = JSON.parse(localStorage.getItem('user'));
       const updatedUser = { ...storedUser, profilePicture: response.data.profilePicture };
       localStorage.setItem('user', JSON.stringify(updatedUser));
 
-      
       setUser(updatedUser);
-
     } catch (error) {
       console.error('Failed to upload profile picture:', error);
     }
@@ -89,7 +83,7 @@ const Profile = ({ user, setUser }) => {
       <h1>My Profile</h1>
       <div className="profile-details">
         <img
-          src={`https://jobportal-black.vercel.app${profile.profilePicture || '/default-avatar.png'}`}
+          src={profile.profilePicture || '/default-avatar.png'}
           alt="Profile"
           className="profile-picture"
         />
