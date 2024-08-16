@@ -1,4 +1,4 @@
-//backend/server.js:
+
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -14,13 +14,13 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-const allowedOrigins = ['https://jobportal-nmce.vercel.app', 'https://myjobportal.com'];
-//const allowedOrigins = ['http://localhost:5173', 'https://myjobportal.com'];
+//const allowedOrigins = ['https://jobportal-nmce.vercel.app', 'https://myjobportal.com'];
+const allowedOrigins = ['http://localhost:5173', 'https://myjobportal.com'];
 
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
-      // Allow requests with no origin (like mobile apps or curl requests)
+      
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -30,12 +30,10 @@ app.use(cors({
 }));
 
 app.use(express.json());
-// Serving static files from the uploads directory
-//app.use('/uploads', express.static(path.join(path.resolve(), 'uploads')));
+
 app.use('/uploads', express.static('uploads'));
 
-// Ensure this is being set correctly
-//const filePath = `/uploads/profile_pictures/${req.file.filename}`;
+
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

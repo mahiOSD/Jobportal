@@ -1,7 +1,6 @@
-//authController.js
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-//import ProfileUser from '../models/ProfileUser.js';
+
 import User from '../models/User.js';
 import transporter from '../config/nodemailerConfig.js';
 
@@ -33,24 +32,21 @@ export const loginUser = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      console.error(`User not found for email: ${email}`);
       return res.status(404).json({ message: 'User not found' });
     }
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
-      console.error(`Invalid password for email: ${email}`);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({ message: 'Login successful', token, user });
   } catch (error) {
-    console.error('Error logging in:', error.message);
+    console.error('Error logging in:', error);
     res.status(500).json({ message: 'Error logging in', error: error.message });
   }
 };
-
 
 export const sendResetLink = async (req, res) => {
   const { email } = req.body;
@@ -109,8 +105,8 @@ export const resetPassword = async (req, res) => {
 };
 export const getUserProfile = async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming user ID is stored in the request object after authentication
-    const user = await User.findById(userId).select('-password'); // Exclude the password field
+    const userId = req.user.id; 
+    const user = await User.findById(userId).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -119,17 +115,3 @@ export const getUserProfile = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-/*
-export const getUserProfile = async (req, res) => {
-  try {
-    const userId = req.user.id; // Assuming user ID is stored in the request object after authentication
-    const user = await ProfileUser.findById(userId).select('-password'); // Exclude the password field
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-*/

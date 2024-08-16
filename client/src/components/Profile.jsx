@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Profile.css';
 
@@ -16,7 +17,7 @@ const Profile = ({ user, setUser }) => {
             return;
           }
 
-          const res = await axios.get('/api/auth/profile', {
+          const res = await axios.get('https://jobportal-black.vercel.app/api/auth/profile', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -61,10 +62,23 @@ const Profile = ({ user, setUser }) => {
       );
 
       console.log('Profile picture uploaded successfully:', response.data);
-      setProfile((prevProfile) => ({
-        ...prevProfile,
+
+      const updatedProfile = {
+        ...profile,
         profilePicture: response.data.profilePicture,
-      }));
+      };
+
+      
+      setProfile(updatedProfile);
+
+      
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      const updatedUser = { ...storedUser, profilePicture: response.data.profilePicture };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
+      
+      setUser(updatedUser);
+
     } catch (error) {
       console.error('Failed to upload profile picture:', error);
     }
@@ -75,18 +89,13 @@ const Profile = ({ user, setUser }) => {
       <h1>My Profile</h1>
       <div className="profile-details">
         <img
-          src={https://jobportal-black.vercel.app/api/profile/${profile.profilePicture}}
+          src={`https://jobportal-black.vercel.app${profile.profilePicture || '/default-avatar.png'}`}
           alt="Profile"
+          className="profile-picture"
         />
-        <p>
-          <strong>Name:</strong> {profile.name || 'N/A'}
-        </p>
-        <p>
-          <strong>Email:</strong> {profile.email || 'N/A'}
-        </p>
-        <p>
-          <strong>Mobile Number:</strong> {profile.phone || 'N/A'}
-        </p>
+        <p><strong>Name:</strong> {profile.name || 'N/A'}</p>
+        <p><strong>Email:</strong> {profile.email || 'N/A'}</p>
+        <p><strong>Mobile Number:</strong> {profile.phone || 'N/A'}</p>
       </div>
 
       <h2>Upload Profile Picture</h2>
@@ -100,6 +109,11 @@ const Profile = ({ user, setUser }) => {
       </form>
     </div>
   );
+};
+
+Profile.propTypes = {
+  user: PropTypes.object,
+  setUser: PropTypes.func,
 };
 
 export default Profile;

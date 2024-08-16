@@ -1,4 +1,4 @@
-// MainLayout.jsx
+
 import React from 'react';
 import Header from './Header';  
 import PropTypes from 'prop-types'; 
@@ -8,10 +8,10 @@ const MainLayout = ({ user, setUser, children }) => {
     return (
       <div>
         <header>
-          <Header user={user} setUser={setUser} /> {/* Pass user and setUser to Header */}
+          <Header user={user} setUser={setUser} /> {}
         </header>
         <main>
-          {children} {/* Render the children passed to MainLayout */}
+          {children} {}
         </main>
       </div>
     );
