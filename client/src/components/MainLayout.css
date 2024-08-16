@@ -1,23 +1,23 @@
-/* Apply some basic styling to the MainLayout */
+
 
 header {
-    background-color: #f8f9fa; /* Light grey background for the header */
-    padding: 10px 20px; /* Some padding for the header area */
-    border-bottom: 1px solid #e0e0e0; /* Add a subtle border below the header */
+    background-color: #f8f9fa; 
+    padding: 10px 20px; 
+    border-bottom: 1px solid #e0e0e0; 
   }
   
   main {
-    padding: 20px; /* Padding for the main content area */
-    background-color: #ffffff; /* White background for the main content */
-    min-height: calc(100vh - 60px); /* Ensures main content takes full height minus the header */
+    padding: 20px; 
+    background-color: #ffffff; 
+    min-height: calc(100vh - 60px);
   }
   
   header .user-profile {
-    float: right; /* Align the user profile dropdown to the right */
-    margin-top: -10px; /* Adjust margin if needed */
+    float: right;
+    margin-top: -10px; 
   }
   
   header .header-left {
-    float: left; /* Align header elements to the left */
+    float: left; 
   }
   

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import MainLayout from './components/MainLayout'; // Adjust the import path as needed
 import Header from './components/Header';
 import Home from './pages/Home';
 import SearchJobs from './pages/Searchjobs';
@@ -13,7 +12,7 @@ import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import PrivateRoute from './components/PrivateRoute';
-import ApplicationForm from './pages/ApplicationForm'; // Ensure this import is only here
+import ApplicationForm from './pages/ApplicationForm'; 
 import Profile from './components/Profile';
 import JobList from './pages/JobList';
 import './App.css';
@@ -33,7 +32,7 @@ const App = () => {
     const fetchJobs = async () => {
       try {
         const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
-       // const response = await axios.get('http://localhost:5000/api/jobs');
+        //const response = await axios.get('http://localhost:5000/api/jobs');
 
         setJobsList(response.data);
       } catch (error) {
@@ -97,7 +96,7 @@ const App = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     navigate('/');
-    window.location.reload(); // Add this line to ensure the state is completely reset
+    window.location.reload(); 
   };
 
   const handleEditJob = (job) => {

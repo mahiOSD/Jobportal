@@ -8,25 +8,27 @@ import axios from 'axios';
 
 const UserProfile = ({ user, setUser }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState(user || {});
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
-      try {
-        const res = await axios.get('/api/auth/profile', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Include token for authorization
-          }
-        });
-        setProfile(res.data);
-      } catch (err) {
-        console.error('Error fetching profile:', err);
+      if (!user) {
+        try {
+          const res = await axios.get('https://jobportal-black.vercel.app/api/auth/profile', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            }
+          });
+          setProfile(res.data);
+        } catch (err) {
+          console.error('Error fetching profile:', err);
+        }
       }
     };
 
     fetchProfile();
-  }, []);
+  }, [user]);
 
   const handleLogout = () => {
     setUser(null);
@@ -44,7 +46,7 @@ const UserProfile = ({ user, setUser }) => {
     <div className="user-profile">
       <button onClick={toggleDropdown} className="user-profile-button">
         <img 
-          src={profile.profilePicture || 'default-avatar.png'} 
+          src={`https://jobportal-black.vercel.app${profile.profilePicture || '/default-avatar.png'}`} 
           alt="User Profile" 
           className="profile-icon" 
         />

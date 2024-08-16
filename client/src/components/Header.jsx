@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faBriefcase, faPlusSquare, faMoneyBillWave } from '@fortawesome/free-solid-svg-icons';
-import { FaUserCircle } from 'react-icons/fa';
-import UserProfile from './UserProfile';
+import { faSearch, faBriefcase, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
 
 const Header = ({ user, setUser }) => {
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -16,11 +15,15 @@ const Header = ({ user, setUser }) => {
     navigate('/');
   };
 
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
   return (
     <header className="header">
       <div className="logo-container">
         <a href="/" className="icon-link">
-          <img src="/images/JobZeelogo.png" alt="logo" className='small-logo'/>
+          <img src="/images/JobZeelogo.png" alt="logo" className="small-logo" />
         </a>
         <div className="logo">JobPortal</div>
       </div>
@@ -43,15 +46,24 @@ const Header = ({ user, setUser }) => {
                   My Jobs
                 </Link>
               </li>
-              
               <li>
                 <Link to="/add-job" className="nav-link">
                   <FontAwesomeIcon icon={faPlusSquare} className="nav-icon" />
                   Post A Job
                 </Link>
               </li>
-              <li>
-                <UserProfile user={user} setUser={setUser} />
+              <li className="profile-icon" onClick={toggleDropdown}>
+                <img
+                  src={`https://jobportal-black.vercel.app${user.profilePicture || '/default-avatar.png'}`}
+                  alt="Profile Icon"
+                  className="profile-picture-icon"
+                />
+                {dropdownVisible && (
+                  <div className="dropdown-menu">
+                    <Link to="/profile" className="dropdown-item">My Profile</Link>
+                    <button className="dropdown-item" onClick={handleLogout}>Logout</button>
+                  </div>
+                )}
               </li>
             </>
           ) : (
