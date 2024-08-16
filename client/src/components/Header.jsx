@@ -54,7 +54,7 @@ const Header = ({ user, setUser }) => {
               </li>
               <li className="profile-icon" onClick={toggleDropdown}>
                 <img
-                  src={`https://jobportal-black.vercel.app${user.profilePicture || '/default-avatar.png'}`}
+                  src={user?.profilePicture || '/default-avatar.png'}
                   alt="Profile Icon"
                   className="profile-picture-icon"
                 />
