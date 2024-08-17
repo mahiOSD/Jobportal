@@ -32,7 +32,7 @@ const App = () => {
     const fetchJobs = async () => {
       try {
         const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
-        //const response = await axios.get('http://localhost:5000/api/jobs');
+       
 
         setJobsList(response.data);
       } catch (error) {
@@ -47,7 +47,7 @@ const App = () => {
     try {
       const response = await axios.put(
         `https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`,
-        //`http://localhost:5000/api/jobs/${updatedJob._id}`,
+       
         updatedJob
       );
       const updatedJobsList = jobsList.map((job) =>
@@ -65,7 +65,7 @@ const App = () => {
     try {
       const response = await axios.post(
         'https://jobportal-black.vercel.app/api/jobs/add',
-        //'http://localhost:5000/api/jobs/add',
+       
         newJob
       );
       setJobsList([...jobsList, response.data]);
@@ -78,7 +78,7 @@ const App = () => {
   const handleDeleteJob = async (jobId) => {
     try {
       await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
-      //await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
+     
       setJobsList(jobsList.filter((job) => job._id !== jobId));
     } catch (error) {
       console.error('Error deleting job:', error);
@@ -126,21 +126,21 @@ const App = () => {
     <div className="app-container">
       <Header user={user} setUser={setUser} onLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<SearchJobs jobs={jobsList} />} />
-        <Route path="/job/:jobId" element={<JobDetails />} />
-        <Route path="/apply/:jobId" element={<ApplicationFormPage />} />
-        <Route path="/login" element={<Login onLogin={handleLogin} setUser={setUser} />} />
-        <Route path="/signup" element={<Signup setUser={setUser} />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/jobs" element={<PrivateRoute user={user}><JobList jobs={jobsList} onEdit={handleEditJob} onDelete={handleDeleteJob} /></PrivateRoute>} />
-        <Route path="/add-job" element={<PrivateRoute user={user}><AddJob addJobToList={handleAddJob} /></PrivateRoute>} />
-        <Route path="/profile" element={<PrivateRoute user={user}><Profile user={user} /></PrivateRoute>} />
-        {editingJob && (
-          <Route path="/edit-job" element={<PrivateRoute user={user}><JobEdit job={editingJob} onSave={handleSave} onCancel={() => setEditingJob(null)} /></PrivateRoute>} />
-        )}
-      </Routes>
+  <Route path="/" element={user ? <SearchJobs jobs={jobsList} /> : <Home />} />
+  <Route path="/search" element={<SearchJobs jobs={jobsList} />} />
+  <Route path="/job/:jobId" element={<JobDetails />} />
+  <Route path="/apply/:jobId" element={<ApplicationFormPage />} />
+  <Route path="/login" element={<Login onLogin={handleLogin} setUser={setUser} />} />
+  <Route path="/signup" element={<Signup setUser={setUser} />} />
+  <Route path="/forgot-password" element={<ForgotPassword />} />
+  <Route path="/reset-password/:token" element={<ResetPassword />} />
+  <Route path="/jobs" element={<PrivateRoute user={user}><JobList jobs={jobsList} onEdit={handleEditJob} onDelete={handleDeleteJob} /></PrivateRoute>} />
+  <Route path="/add-job" element={<PrivateRoute user={user}><AddJob addJobToList={handleAddJob} /></PrivateRoute>} />
+  <Route path="/profile" element={<PrivateRoute user={user}><Profile user={user} /></PrivateRoute>} />
+  {editingJob && (
+    <Route path="/edit-job" element={<PrivateRoute user={user}><JobEdit job={editingJob} onSave={handleSave} onCancel={() => setEditingJob(null)} /></PrivateRoute>} />
+  )}
+</Routes>
     </div>
   );
 };
