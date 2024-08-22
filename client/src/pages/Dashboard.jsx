@@ -9,19 +9,18 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tool
 const Dashboard = () => {
   const [jobStats, setJobStats] = useState(null);
 
-  //useEffect(() => {
-    const fetchJobStats = async () => {
-      try {
-        //const response = await axios.get('http://localhost:5000/api/jobs/stats', {
-        const response = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
+  const fetchJobStats = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setJobStats(response.data);
+  } catch (error) {
+    console.error('Error fetching job stats:', error);
+  }
+};
 
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        setJobStats(response.data);
-      } catch (error) {
-        console.error('Error fetching job stats:', error);
-      }
-    };
     useEffect(() => {
         fetchJobStats();
     
