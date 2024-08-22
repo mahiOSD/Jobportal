@@ -26,17 +26,13 @@ const AddJob = ({ addJobToList }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting job data:', newJob);
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        'https://jobportal-black.vercel.app/api/jobs/add',
-        newJob,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+     const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
+     // const response = await axios.post('http://localhost:5000/api/jobs/add', newJob, {
+        withCredentials: true,
+      });
+      console.log('Job added successfully:', response.data);
       addJobToList(response.data);
       setNewJob({
         title: '',
@@ -50,15 +46,12 @@ const AddJob = ({ addJobToList }) => {
         requiredSkills: '',
       });
       navigate('/jobs');
+      // Dispatch custom event
       window.dispatchEvent(new Event('jobAdded'));
     } catch (error) {
-      console.error(
-        'Error adding job:',
-        error.response ? error.response.data : error.message
-      );
+      console.error('Error adding job:', error.response ? error.response.data : error.message);
     }
   };
-
 
   return (
     <form onSubmit={handleSubmit} className="add-job-form">
