@@ -1,22 +1,13 @@
-// auth.js
+//auth.js
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
-
-const auth = (req, res, next) => {
-  const authHeader = req.header('Authorization');
-
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Authorization header is missing.' });
-  }
-
-  const token = authHeader.startsWith('Bearer ')
-    ? authHeader.slice(7).trim()
-    : authHeader.trim();
+const auth = async (req, res, next) => {
+  const token = req.header('Authorization').replace('Bearer ', '');
 
   if (!token) {
-    return res.status(401).json({ message: 'Authorization token is missing.' });
+    return res.status(401).json({ message: 'Authorization denied.' });
   }
 
   try {
@@ -24,7 +15,6 @@ const auth = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    console.error('Token verification failed:', error.message);
     res.status(401).json({ message: 'Invalid token.' });
   }
 };
