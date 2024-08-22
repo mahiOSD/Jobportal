@@ -12,7 +12,9 @@ const Dashboard = () => {
   //useEffect(() => {
     const fetchJobStats = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/jobs/stats', {
+        //const response = await axios.get('http://localhost:5000/api/jobs/stats', {
+          const response = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats');
+
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
         setJobStats(response.data);
