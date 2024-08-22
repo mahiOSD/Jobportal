@@ -9,28 +9,31 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tool
 const Dashboard = () => {
   const [jobStats, setJobStats] = useState(null);
 
-  const fetchJobStats = async () => {
-    try {
-      const response = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-      setJobStats(response.data);
-    } catch (error) {
-      console.error('Error fetching job stats:', error);
-    }
-  };
+  //useEffect(() => {
+    const fetchJobStats = async () => {
+      try {
+        //const response = await axios.get('http://localhost:5000/api/jobs/stats', {
+        const response = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
 
-  useEffect(() => {
-    fetchJobStats();
-
-    // Set up event listener for job addition
-    window.addEventListener('jobAdded', fetchJobStats);
-
-    // Clean up event listener
-    return () => {
-      window.removeEventListener('jobAdded', fetchJobStats);
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+        setJobStats(response.data);
+      } catch (error) {
+        console.error('Error fetching job stats:', error);
+      }
     };
-  }, []);
+    useEffect(() => {
+        fetchJobStats();
+    
+        // Set up event listener for job addition
+        window.addEventListener('jobAdded', fetchJobStats);
+    
+        // Clean up event listener
+        return () => {
+          window.removeEventListener('jobAdded', fetchJobStats);
+        };
+      }, []);
+    
 
   if (!jobStats) return <div>Loading...</div>;
 
