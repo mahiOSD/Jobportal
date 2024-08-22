@@ -5,10 +5,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const auth = async (req, res, next) => {
-  const token = req.header('Authorization').replace('Bearer ', '');
+  const authHeader = req.header('Authorization');
+  
+  if (!authHeader) {
+    return res.status(401).json({ message: 'Authorization header is missing.' });
+  }
+
+  const token = authHeader.replace('Bearer ', '');
 
   if (!token) {
-    return res.status(401).json({ message: 'Authorization denied.' });
+    return res.status(401).json({ message: 'Authorization token is missing.' });
   }
 
   try {
