@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBriefcase, faPlusSquare, faSearch, faBars, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faPlusSquare, faSearch, faBars, faSignOutAlt ,faChartLine ,faChartBar} from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
 
 const Header = ({ user, setUser }) => {
@@ -82,6 +82,10 @@ const Header = ({ user, setUser }) => {
           <Link to="/add-job" className="dashboard-item">
             <FontAwesomeIcon icon={faPlusSquare} className="nav-icon" />
             Post A Job
+          </Link>
+          <Link to="/dashboard" className="dashboard-item">
+            <FontAwesomeIcon icon={faChartBar} className="nav-icon" />
+            Dashboard
           </Link>
           <div className="spacer"></div>
           <button onClick={handleLogout} className="dashboard-item logout">

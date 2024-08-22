@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import Job from '../models/job.js'; 
 import Application from '../models/Application.js';
 import multer from 'multer';
+import auth from '../middleware/auth.js';
+
 const router = express.Router();
 
 
@@ -180,7 +182,26 @@ let exampleJobs = [
     experienceLevel: 'Senior',
   },
 ];
+router.get('/stats', auth, async (req, res) => {
+  try {
+    const totalJobs = await Job.countDocuments();
+    const totalApplications = await Application.countDocuments();
+    const jobsAdded = await Job.countDocuments({ createdBy: req.user.id });
+    const categoryCounts = await Job.aggregate([
+      { $group: { _id: "$category", count: { $sum: 1 } } },
+      { $project: { category: "$_id", count: 1, _id: 0 } }
+    ]);
 
+    res.json({
+      totalJobs,
+      totalApplications,
+      jobsAdded,
+      categoryCounts
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching job stats', error: error.message });
+  }
+});
 router.get('/', (req, res) => {
   res.json(exampleJobs);
 });

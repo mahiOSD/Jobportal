@@ -1,3 +1,4 @@
+//App.jsx:
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -15,6 +16,7 @@ import PrivateRoute from './components/PrivateRoute';
 import ApplicationForm from './pages/ApplicationForm'; 
 import Profile from './components/Profile';
 import JobList from './pages/JobList';
+import Dashboard from './pages/Dashboard';
 import './App.css';
 
 const App = () => {
@@ -31,7 +33,8 @@ const App = () => {
 
     const fetchJobs = async () => {
       try {
-        const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
+           //const response = await axios.get('http://localhost:5000/api/jobs');
+             const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
        
 
         setJobsList(response.data);
@@ -46,6 +49,7 @@ const App = () => {
   const handleSave = async (updatedJob) => {
     try {
       const response = await axios.put(
+        //`http://localhost:5000/api/jobs/${updatedJob._id}`,
         `https://jobportal-black.vercel.app/api/jobs/${updatedJob._id}`,
        
         updatedJob
@@ -65,7 +69,8 @@ const App = () => {
     try {
       const response = await axios.post(
         'https://jobportal-black.vercel.app/api/jobs/add',
-       
+        //'http://localhost:5000/api/jobs/add',
+
         newJob
       );
       setJobsList([...jobsList, response.data]);
@@ -78,7 +83,8 @@ const App = () => {
   const handleDeleteJob = async (jobId) => {
     try {
       await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
-     
+      //await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
+
       setJobsList(jobsList.filter((job) => job._id !== jobId));
     } catch (error) {
       console.error('Error deleting job:', error);
@@ -134,6 +140,7 @@ const App = () => {
   <Route path="/signup" element={<Signup setUser={setUser} />} />
   <Route path="/forgot-password" element={<ForgotPassword />} />
   <Route path="/reset-password/:token" element={<ResetPassword />} />
+  <Route path="/dashboard" element={<PrivateRoute user={user}><Dashboard /></PrivateRoute>} />
   <Route path="/jobs" element={<PrivateRoute user={user}><JobList jobs={jobsList} onEdit={handleEditJob} onDelete={handleDeleteJob} /></PrivateRoute>} />
   <Route path="/add-job" element={<PrivateRoute user={user}><AddJob addJobToList={handleAddJob} /></PrivateRoute>} />
   <Route path="/profile" element={<PrivateRoute user={user}><Profile user={user} /></PrivateRoute>} />
