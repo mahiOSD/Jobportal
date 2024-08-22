@@ -60,6 +60,7 @@ export const sendResetLink = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
     const resetLink = `https://jobportal-black.vercel.app/reset-password/${token}`;
+    //const resetLink = `http://localhost:5173/reset-password/${token}`;
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
