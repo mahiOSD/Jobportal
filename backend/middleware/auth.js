@@ -1,17 +1,19 @@
-//auth.js
+// auth.js
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const auth = async (req, res, next) => {
+const auth = (req, res, next) => {
   const authHeader = req.header('Authorization');
-  
+
   if (!authHeader) {
     return res.status(401).json({ message: 'Authorization header is missing.' });
   }
 
-  const token = authHeader.replace('Bearer ', '');
+  const token = authHeader.startsWith('Bearer ')
+    ? authHeader.slice(7).trim()
+    : authHeader.trim();
 
   if (!token) {
     return res.status(401).json({ message: 'Authorization token is missing.' });
@@ -22,6 +24,7 @@ const auth = async (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
+    console.error('Token verification failed:', error.message);
     res.status(401).json({ message: 'Invalid token.' });
   }
 };
