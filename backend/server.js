@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import jobsRouter from './routes/jobs.js';
 import authRouter from './routes/auth.js';
 import profileRouter from './routes/profile.js';
+import auth from './middleware/auth.js';
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 app.use('/api/auth', authRouter);
 app.use('/api/jobs', jobsRouter);
 app.use('/api/profile', profileRouter);
+app.use('/api/jobs', auth, jobsRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
