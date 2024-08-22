@@ -44,7 +44,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 app.use('/api/auth', authRouter);
 app.use('/api/jobs', jobsRouter);
 app.use('/api/profile', profileRouter);
-app.use('/api/jobs', auth, jobsRouter);
+//app.use('/api/jobs', auth, jobsRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
