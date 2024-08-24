@@ -1,3 +1,4 @@
+/*
 .dashboard {
     padding: 20px;
   }
@@ -17,5 +18,36 @@
     .chart {
       width: 100%;
     }
+  }
+  */
+  .dashboard {
+    padding: 20px;
+  }
+  
+  .stats-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+  }
+  
+  .charts-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .chart {
+    width: 48%;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
   }
   
