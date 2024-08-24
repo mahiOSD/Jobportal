@@ -6,10 +6,9 @@ import './Dashboard.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
-
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = 'https://jobportal-black.vercel.app '; 
 
   useEffect(() => {
     const fetchStats = async () => {
