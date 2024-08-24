@@ -13,8 +13,8 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        console.log("Fetching from:", `${API_URL}/api/stats`); // Log the URL
-        const response = await fetch(`${API_URL}/api/stats`); 
+        console.log("Fetching from:", `${https://jobportal-black.vercel.app}/api/stats`); // Log the URL
+        const response = await fetch(`${https://jobportal-black.vercel.app}/api/stats`); 
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
