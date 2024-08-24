@@ -13,7 +13,8 @@ const Dashboard = () => {
     const fetchStats = async () => {
       try {
         //const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-        const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app';
+        //const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app';
+        const API_URL = import.meta.env.VITE_API_URL; 
 
         const token = localStorage.getItem('token');
         const response = await axios.get(`${API_URL}/api/jobs/stats`, {
