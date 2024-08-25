@@ -15,6 +15,7 @@ const Dashboard = () => {
         const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app'; 
         const token = localStorage.getItem('token'); 
 
+        // Make a single request using axios
         const response = await axios.get(`${API_URL}/api/jobs/stats`, {
           headers: {
             'Authorization': `Bearer ${token}` 
@@ -31,7 +32,6 @@ const Dashboard = () => {
   }, []);
 
   if (!stats) return <div>Loading...</div>;
-
   const barChartData = {
     labels: ['Total Jobs', 'Total Applications', 'Jobs Added by You'],
     datasets: [
@@ -61,12 +61,30 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <h2>Dashboard</h2>
-      <div className="chart-container">
-        <Bar data={barChartData} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
+      <h1>Dashboard</h1>
+      <div className="stats-container">
+        <div className="stat-card">
+          <h2>Total Jobs</h2>
+          <p>{stats.totalJobs}</p>
+        </div>
+        <div className="stat-card">
+          <h2>Total Applications</h2>
+          <p>{stats.totalApplications}</p>
+        </div>
+        <div className="stat-card">
+          <h2>Jobs Added by You</h2>
+          <p>{stats.jobsAdded}</p>
+        </div>
       </div>
-      <div className="chart-container">
-        <Pie data={pieChartData} options={{ responsive: true, plugins: { legend: { position: 'top' } } }} />
+      <div className="charts-container">
+        <div className="chart">
+          <h2>Job Statistics</h2>
+          <Bar data={barChartData} />
+        </div>
+        <div className="chart">
+          <h2>Jobs by Category</h2>
+          <Pie data={pieChartData} />
+        </div>
       </div>
     </div>
   );
