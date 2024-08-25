@@ -8,25 +8,26 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
-  const API_URL = 'https://jobportal-black.vercel.app '; 
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        console.log("Fetching from:", `${API_URL}/api/stats`); // Log the URL
-        const response = await fetch(`${API_URL}/api/stats`); 
+        //const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        //const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app';
+        const API_URL = import.meta.env.VITE_API_BASE_URL || 'https://jobportal-black.vercel.app';
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setStats(data);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${API_URL}/api/jobs/stats`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setStats(response.data);
       } catch (error) {
-        console.error("Error fetching stats:", error);
+        console.error('Error fetching stats:', error);
       }
     };
-
+    
     fetchStats();
   }, []);
 
