@@ -12,26 +12,26 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        //const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-        const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app';
+        const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app'; 
+        const token = localStorage.getItem('token'); 
 
-        const token = localStorage.getItem('token');
+        // Make a single request using axios
         const response = await axios.get(`${API_URL}/api/jobs/stats`, {
           headers: {
-            Authorization: `Bearer ${token}`
+            'Authorization': `Bearer ${token}` 
           }
         });
+
         setStats(response.data);
       } catch (error) {
         console.error('Error fetching stats:', error);
       }
     };
-    
+
     fetchStats();
   }, []);
 
   if (!stats) return <div>Loading...</div>;
-
   const barChartData = {
     labels: ['Total Jobs', 'Total Applications', 'Jobs Added by You'],
     datasets: [
