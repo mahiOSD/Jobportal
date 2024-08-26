@@ -21,6 +21,7 @@ const Login = ({ setUser }) => {
         email,
         password,
       });
+            console.log(response.data); // Debug: Check what the response contains
 
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
