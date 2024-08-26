@@ -10,26 +10,28 @@ const Dashboard = () => {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app'; 
-        const token = localStorage.getItem('token'); 
+  const fetchStats = async () => {
+    const token = localStorage.getItem('token');
+    console.log("Token from localStorage:", token); // Add this line
 
-        // Make a single request using axios
-        const response = await axios.get(`${API_URL}/api/jobs/stats`, {
-          headers: {
-            'Authorization': `Bearer ${token}` 
-          }
-        });
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app';
+      const response = await axios.get(`${API_URL}/api/jobs/stats`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      console.log("Response data:", response.data); // Add this line
 
-        setStats(response.data);
-      } catch (error) {
-        console.error('Error fetching stats:', error);
-      }
-    };
+      setStats(response.data);
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
 
-    fetchStats();
-  }, []);
+  fetchStats();
+}, []);
+
 
   if (!stats) return <div>Loading...</div>;
   const barChartData = {
