@@ -53,20 +53,19 @@ export const loginUser = async (req, res) => {
   }
 };
 
+
 export const sendResetLink = async (req, res) => {
   const { email } = req.body;
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      console.error(`User not found for email: ${email}`);
       return res.status(404).json({ message: 'User not found' });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '15m' });
-    const resetLink = `https://jobportal-black.vercel.app/reset-password/${token}`;
-    //const resetLink = `http://localhost:5173/reset-password/${token}`;
-
+    const resetLink = `https://jobportal-nmce.vercel.app/reset-password/${token}`;
+    
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
@@ -81,6 +80,7 @@ export const sendResetLink = async (req, res) => {
     res.status(500).json({ message: 'Error sending reset link', error: error.message });
   }
 };
+
 
 export const resetPassword = async (req, res) => {
   const { token } = req.params;
