@@ -1,16 +1,21 @@
-// src/pages/ResetPassword.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const ResetPassword = () => {
-  const { token } = useParams(); // Extract token from URL
+  const { token } = useParams(); 
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
     try {
       const response = await axios.post(
         `https://jobportal-black.vercel.app/api/auth/reset-password/${token}`,
@@ -18,6 +23,7 @@ const ResetPassword = () => {
         { headers: { 'Content-Type': 'application/json' } }
       );
       setSuccess(response.data.message);
+      setError('');
     } catch (error) {
       setError(error.response ? error.response.data.message : 'Error resetting password');
       console.error('Error resetting password:', error);
@@ -31,6 +37,13 @@ const ResetPassword = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="New Password"
+        required
+      />
+      <input
+        type="password"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+        placeholder="Confirm Password"
         required
       />
       <button type="submit">Reset Password</button>
