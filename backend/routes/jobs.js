@@ -4,7 +4,7 @@ import Job from '../models/job.js';
 import Application from '../models/Application.js';
 import multer from 'multer';
 import auth from '../middleware/auth.js';
-
+import mongoose from 'mongoose';
 const router = express.Router();
 
 
@@ -202,23 +202,38 @@ router.get('/stats', auth, async (req, res) => {
     res.status(500).json({ message: 'Error fetching job stats', error: error.message });
   }
 });
-router.get('/', (req, res) => {
-  res.json(exampleJobs);
-});
 
-router.get('/:id', (req, res) => {
-  const job = exampleJobs.find(job => job._id === req.params.id);
-  if (!job) {
-    return res.status(404).json({ message: 'Job not found' });
+// Route to get all jobs (using both MongoDB and example jobs)
+router.get('/', async (req, res) => {
+  try {
+    const jobsFromDB = await Job.find();
+    res.json([...exampleJobs, ...jobsFromDB]);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching jobs', error: error.message });
   }
-  res.json(job);
 });
 
-router.post('/', (req, res) => {
-  const newJob = { _id: uuidv4(), ...req.body };
-  exampleJobs.push(newJob);
-  res.status(201).json(newJob);
+router.get('/:id', async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      const jobFromExample = exampleJobs.find(job => job._id === req.params.id);
+      if (!jobFromExample) {
+        return res.status(404).json({ message: 'Job not found' });
+      }
+      return res.json(jobFromExample);
+    }
+
+    const jobFromDB = await Job.findById(req.params.id);
+    if (!jobFromDB) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+
+    res.json(jobFromDB);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching job', error: error.message });
+  }
 });
+
 
 router.post('/add', async (req, res) => {
   const { title, company, description, location, salary, category, date, experienceLevel, requiredSkills } = req.body;
@@ -247,6 +262,49 @@ router.post('/add', async (req, res) => {
   }
 });
 
+router.post('/', (req, res) => {
+  const newJob = { _id: uuidv4(), ...req.body };
+  exampleJobs.push(newJob);
+  res.status(201).json(newJob);
+});
+
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  try {
+    const updatedJob = await Job.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updatedJob) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+
+    res.json(updatedJob);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating job', error: error.message });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const job = await Job.findByIdAndDelete(req.params.id);
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+    res.json({ message: 'Job deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting job', error: error.message });
+  }
+});
+
+router.delete('/example/:id', (req, res) => {
+  const index = exampleJobs.findIndex(job => job._id === req.params.id);
+  if (index === -1) {
+    return res.status(404).json({ message: 'Job not found' });
+  }
+  exampleJobs.splice(index, 1);
+  res.json({ message: 'Job deleted successfully' });
+});
 
 router.post('/applications', upload.single('resume'), async (req, res) => {
   const { jobId, applicantName, applicantEmail, applicantPhone, applicantAddress, coverLetter } = req.body;
@@ -264,7 +322,7 @@ router.post('/applications', upload.single('resume'), async (req, res) => {
       applicantPhone,
       applicantAddress,
       coverLetter,
-      resume: resume.buffer,  
+      resume: resume.buffer,
     });
     const savedApplication = await newApplication.save();
     res.status(201).json(savedApplication);
@@ -274,24 +332,4 @@ router.post('/applications', upload.single('resume'), async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
-  const index = exampleJobs.findIndex(job => job._id === req.params.id);
-  if (index === -1) {
-    return res.status(404).json({ message: 'Job not found' });
-  }
-  exampleJobs[index] = { ...exampleJobs[index], ...req.body };
-  res.json(exampleJobs[index]);
-});
-
-router.delete('/:id', (req, res) => {
-  const index = exampleJobs.findIndex(job => job._id === req.params.id);
-  if (index === -1) {
-    return res.status(404).json({ message: 'Job not found' });
-  }
-  exampleJobs.splice(index, 1);
-  res.json({ message: 'Job deleted successfully' });
-});
-
-
 export default router;
-
