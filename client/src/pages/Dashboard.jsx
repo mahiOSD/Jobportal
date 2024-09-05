@@ -118,7 +118,7 @@ const Dashboard = () => {
           <p>{stats.totalApplications}</p>
         </div>
         <div className="stat-card">
-          <h2>Jobs Added by You</h2>
+          <h2>Add Jobs</h2>
           <p>{stats.jobsAdded}</p>
         </div>
       </div>
