@@ -79,7 +79,7 @@ const Dashboard = () => {
   if (!stats) return <p>No data available</p>;
 
   const barChartData = {
-    labels: ['Total Jobs', 'Total Applications', 'Jobs Added by You'],
+    labels: ['Total Jobs', 'Total Applications', 'Add Jobs'],
     datasets: [
       {
         label: 'Job Statistics',
