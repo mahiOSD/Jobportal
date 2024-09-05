@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
@@ -8,32 +9,75 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarEle
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app';
+  //const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-  useEffect(() => {
-  const fetchStats = async () => {
-    const token = localStorage.getItem('token');
-    console.log("Token from localStorage:", token); // Add this line
-
+  const refreshToken = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'https://jobportal-black.vercel.app';
-      const response = await axios.get(`${API_URL}/api/jobs/stats`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await axios.post(`${API_URL}/api/auth/refresh-token`, {}, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
-      console.log("Response data:", response.data); // Add this line
-
-      setStats(response.data);
+      localStorage.setItem('token', response.data.token);
+      return response.data.token;
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error('Error refreshing token:', error);
+      navigate('/login');
     }
   };
 
-  fetchStats();
-}, []);
+  const fetchStats = async () => {
+    let token = localStorage.getItem('token');
+    if (!token) {
+      console.log('No token found, redirecting to login');
+      navigate('/login');
+      return;
+    }
 
+    try {
+      const response = await axios.get(`${API_URL}/api/jobs/stats`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      console.log("Response data:", response.data);
+      setStats(response.data);
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        token = await refreshToken();
+        if (token) {
+          fetchStats(); // Retry with new token
+        }
+      } else {
+        console.error('Error fetching stats:', error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (!stats) return <div>Loading...</div>;
+  useEffect(() => {
+    fetchStats();
+
+    const handleJobAdded = () => {
+      fetchStats();
+    };
+
+    const handleUserAuthenticated = () => {
+      fetchStats();
+    };
+    
+    window.addEventListener('userAuthenticated', handleUserAuthenticated);
+    window.addEventListener('jobAdded', handleJobAdded);
+
+    return () => {
+      window.removeEventListener('userAuthenticated', handleUserAuthenticated);
+      window.removeEventListener('jobAdded', handleJobAdded);
+    };
+  }, [navigate]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!stats) return <p>No data available</p>;
+
   const barChartData = {
     labels: ['Total Jobs', 'Total Applications', 'Jobs Added by You'],
     datasets: [
