@@ -203,7 +203,7 @@ router.get('/stats', auth, async (req, res) => {
   }
 });
 
-// Route to get all jobs (using both MongoDB and example jobs)
+
 router.get('/', async (req, res) => {
   try {
     const jobsFromDB = await Job.find();
@@ -235,7 +235,7 @@ router.get('/:id', async (req, res) => {
 });
 
 
-router.post('/add', async (req, res) => {
+router.post('/add', auth, async (req, res) => {
   const { title, company, description, location, salary, category, date, experienceLevel, requiredSkills } = req.body;
 
   if (!title || !company || !description || !location || !salary || !category || !date || !experienceLevel || !requiredSkills) {
@@ -252,7 +252,8 @@ router.post('/add', async (req, res) => {
       category,
       date,
       experienceLevel,
-      requiredSkills
+      requiredSkills,
+      createdBy: req.user.id, 
     });
     const savedJob = await newJob.save();
     res.json(savedJob);
