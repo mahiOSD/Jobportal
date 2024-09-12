@@ -141,7 +141,7 @@ const App = () => {
   <Route path="/signup" element={<Signup setUser={setUser} />} />
   <Route path="/forgot-password" element={<ForgotPassword />} />
   <Route path="/reset-password/:token" element={<ResetPassword />} />
-  <Route path="/dashboard" element={<PrivateRoute user={user}><Dashboard /></PrivateRoute>} />
+  <Route path="/dashboard" element={<Dashboard />} />
   <Route path="/jobs" element={<PrivateRoute user={user}><JobList jobs={jobsList} onEdit={handleEditJob} onDelete={handleDeleteJob} /></PrivateRoute>} />
   <Route path="/add-job" element={<PrivateRoute user={user}><AddJob addJobToList={handleAddJob} /></PrivateRoute>} />
   <Route path="/profile" element={<PrivateRoute user={user}><Profile user={user} /></PrivateRoute>} />
