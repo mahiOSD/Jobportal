@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import './AddJob.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const AddJob = ({ addJobToList }) => {
+const AddJob = () => {
   const [newJob, setNewJob] = useState({
     title: '',
     company: '',
@@ -16,24 +14,26 @@ const AddJob = ({ addJobToList }) => {
     experienceLevel: '',
     requiredSkills: '',
   });
-
   const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setNewJob({ ...newJob, [name]: value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Submitting job data:', newJob);
+
+    let token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Token is missing.');
+      return;
+    }
+
     try {
-     const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
-     // const response = await axios.post('http://localhost:5000/api/jobs/add', newJob, {
-        withCredentials: true,
+      const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
       });
       console.log('Job added successfully:', response.data);
-      addJobToList(response.data);
+      
       setNewJob({
         title: '',
         company: '',
@@ -46,11 +46,49 @@ const AddJob = ({ addJobToList }) => {
         requiredSkills: '',
       });
       navigate('/jobs');
-      // Dispatch custom event
+      
       window.dispatchEvent(new Event('jobAdded'));
     } catch (error) {
-      console.error('Error adding job:', error.response ? error.response.data : error.message);
+      if (error.response && error.response.status === 401) {
+        console.error('Token expired, refreshing...');
+
+        try {
+          token = await refreshToken();
+          const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            },
+          });
+          console.log('Job added successfully after token refresh:', response.data);
+          
+          setNewJob({
+            title: '',
+            company: '',
+            description: '',
+            location: '',
+            salary: '',
+            category: '',
+            date: '',
+            experienceLevel: '',
+            requiredSkills: '',
+          });
+          navigate('/jobs');
+          window.dispatchEvent(new Event('jobAdded'));
+        } catch (refreshError) {
+          console.error('Token refresh failed:', refreshError);
+        }
+      } else {
+        console.error('Error adding job:', error.response ? error.response.data : error.message);
+      }
     }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewJob({
+      ...newJob,
+      [name]: value,
+    });
   };
 
   return (
@@ -97,8 +135,22 @@ const AddJob = ({ addJobToList }) => {
   );
 };
 
-AddJob.propTypes = {
-  addJobToList: PropTypes.func.isRequired,
+
+const refreshToken = async () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (!refreshToken) {
+    throw new Error('Refresh token is missing.');
+  }
+
+  try {
+    const response = await axios.post('https://jobportal-black.vercel.app/api/auth/refresh', { refreshToken });
+    const newToken = response.data.token;
+    localStorage.setItem('token', newToken);
+    return newToken;
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    throw error;
+  }
 };
 
 export default AddJob;
