@@ -182,9 +182,18 @@ let exampleJobs = [
     experienceLevel: 'Senior',
   },
 ];
+
 router.get('/stats', auth, async (req, res) => {
   try {
-    const totalJobs = await Job.countDocuments();
+    
+    const totalJobsFromDB = await Job.countDocuments();
+    
+    
+    const totalExampleJobs = exampleJobs.length;
+    
+    
+    const totalJobs = totalJobsFromDB + totalExampleJobs;
+
     const totalApplications = await Application.countDocuments();
     const jobsAdded = await Job.countDocuments({ createdBy: req.user.id });
     const categoryCounts = await Job.aggregate([
@@ -253,7 +262,7 @@ router.post('/add', auth, async (req, res) => {
       date,
       experienceLevel,
       requiredSkills,
-      createdBy: req.user.id, 
+      createdBy: req.user.id, // Ensure this is set
     });
     const savedJob = await newJob.save();
     res.json(savedJob);
