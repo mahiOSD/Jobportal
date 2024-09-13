@@ -59,6 +59,28 @@ const JobList = ({ onEdit, onDelete }) => {
     setSearchQuery(e.target.value);
   };
 
+  const handleDelete = async (jobId) => {
+    try {
+     
+      const updatedFilteredJobs = filteredJobs.filter(job => job._id !== jobId);
+      setFilteredJobs(updatedFilteredJobs);
+
+      
+      onDelete(jobId);
+
+     
+      await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
+      
+     
+      // fetchJobs();
+    } catch (err) {
+      
+      setFilteredJobs(filteredJobs);
+      setError('Error deleting job');
+      console.error('Error deleting job:', err);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -115,7 +137,7 @@ const JobList = ({ onEdit, onDelete }) => {
                   </button>
                 </td>
                 <td className="job-delete">
-                  <button onClick={() => onDelete(job._id)}>Delete</button>
+                  <button onClick={() => handleDelete(job._id)}>Delete</button>
                 </td>
               </tr>
             ))}
