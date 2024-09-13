@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Header from './components/Header';
 import Home from './pages/Home';
-import SearchJobs from './pages/SearchJobs';
+import SearchJobs from './pages/Searchjobs';
 import JobEdit from './pages/JobEdit';
 import AddJob from './pages/AddJob';
 import JobDetails from './pages/JobDetails';
