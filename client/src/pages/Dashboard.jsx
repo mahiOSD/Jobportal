@@ -13,52 +13,43 @@ const Dashboard = () => {
 
   const fetchStats = async () => {
     try {
-      let token = localStorage.getItem('token');
-      // eslint-disable-next-line no-unused-vars
-      const refreshToken = localStorage.getItem('refreshToken');
-
+      const token = localStorage.getItem('token');
       if (!token) throw new Error('Token is missing');
 
-      try {
-        const { data } = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
-          headers: {
-            Authorization: `Bearer ${token}`,
+      const { data } = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setBarData({
+        labels: ['Total Jobs', 'Total Applications', 'Jobs Added'],
+        datasets: [
+          {
+            label: 'Job Statistics',
+            data: [data.totalJobs, data.totalApplications, data.jobsAdded],
+            backgroundColor: ['#3498db', '#2ecc71', '#e74c3c'],
           },
-        });
+        ],
+      });
 
-        const hasData = data && data.totalJobs !== undefined && data.categoryCounts !== undefined;
-
-        setBarData({
-          labels: hasData ? ['Total Jobs', 'Total Applications', 'Jobs Added'] : [],
-          datasets: [
-            {
-              label: 'Job Statistics',
-              data: hasData ? [data.totalJobs, data.totalApplications, data.jobsAdded] : [0, 0, 0],
-              backgroundColor: ['#3498db', '#2ecc71', '#e74c3c'],
-            },
-          ],
-        });
-
-        setPieData({
-          labels: hasData ? (data.categoryCounts || []).map((cat) => cat.category) : [],
-          datasets: [
-            {
-              label: 'Job Categories',
-              data: hasData ? (data.categoryCounts || []).map((cat) => cat.count) : [0],
-              backgroundColor: [
-                '#f39c12', '#8e44ad', '#e67e22', '#1abc9c', '#c0392b',
-                '#2980b9', '#27ae60', '#d35400', '#7f8c8d', '#34495e',
-              ],
-            },
-          ],
-        });
-        setLoading(false);
-      } catch (fetchError) {
-        console.error('Error fetching job stats:', fetchError);
-        setLoading(false);
-      }
+      setPieData({
+        labels: data.categoryCounts.map((cat) => cat.category),
+        datasets: [
+          {
+            label: 'Job Categories',
+            data: data.categoryCounts.map((cat) => cat.count),
+            backgroundColor: [
+              '#f39c12', '#8e44ad', '#e67e22', '#1abc9c', '#c0392b',
+              '#2980b9', '#27ae60', '#d35400', '#7f8c8d', '#34495e',
+            ],
+          },
+        ],
+      });
+      
+      setLoading(false);
     } catch (error) {
-      console.error('Unexpected error:', error);
+      console.error('Error fetching job stats:', error);
       setLoading(false);
     }
   };
@@ -66,14 +57,14 @@ const Dashboard = () => {
   useEffect(() => {
     fetchStats();
 
-    const handleJobAdded = () => {
+    const handleUserLogin = () => {
       fetchStats();
     };
 
-    window.addEventListener('jobAdded', handleJobAdded);
+    window.addEventListener('userLoggedIn', handleUserLogin);
 
     return () => {
-      window.removeEventListener('jobAdded', handleJobAdded);
+      window.removeEventListener('userLoggedIn', handleUserLogin);
     };
   }, []);
 
@@ -91,7 +82,7 @@ const Dashboard = () => {
               <p>{barData.datasets ? barData.datasets[0].data[1] : 0}</p>
             </div>
             <div className="header-item">
-              <h3>Add Jobs</h3>
+              <h3>Jobs Added</h3>
               <p>{barData.datasets ? barData.datasets[0].data[2] : 0}</p>
             </div>
           </div>

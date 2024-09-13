@@ -20,13 +20,7 @@
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-/*
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-*/
+
 .logo img {
   width: 100px;
 }
@@ -78,7 +72,7 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Icon styling */
+
 .feature-icon {
   font-size: 30px;
   margin-bottom: 10px;
@@ -86,7 +80,7 @@
 }
 
 .feature-item:hover .feature-icon {
-  color: #1b2229; /* Change icon color on hover */
+  color: #1b2229; 
 }
 .cta-button {
   background-color: #007bff;
@@ -105,8 +99,7 @@
 .home-banner {
   text-align: center;
   padding: 53px 50px;
-  /*background: url('/banner.jpg') no-repeat center center/cover;
-  background-size: cover;*/
+  
   color: white;
 }
 

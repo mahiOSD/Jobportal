@@ -262,7 +262,7 @@ router.post('/add', auth, async (req, res) => {
       date,
       experienceLevel,
       requiredSkills,
-      createdBy: req.user.id, // Ensure this is set
+      createdBy: req.user.id,
     });
     const savedJob = await newJob.save();
     res.json(savedJob);

@@ -41,8 +41,6 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 app.use('/api/auth', authRouter);
 app.use('/api/jobs', jobsRouter);
 app.use('/api/profile', profileRouter);
-//app.use('/api/profile', auth, profileRouter);
-//app.use('/api/jobs', auth, jobsRouter);
 
 
 app.listen(port, () => {

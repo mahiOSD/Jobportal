@@ -1,33 +1,37 @@
-//Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types'; // Import PropTypes
+import PropTypes from 'prop-types'; 
 import './Login.css';
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [category, setCategory] = useState('user'); 
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError(''); 
 
     try {
-      //const response = await axios.post('http://localhost:5000/api/auth/login', {
       const response = await axios.post('https://jobportal-black.vercel.app/api/auth/login', {
         email,
         password,
+        category, 
       });
-            console.log(response.data); // Debug: Check what the response contains
+      console.log(response.data);
 
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         setUser(response.data.user);
-        navigate('/');
+        
+        window.dispatchEvent(new Event('userLoggedIn'));
+        navigate('/dashboard');
+      } else {
+        setError('Login failed: Invalid response');
       }
     } catch (error) {
       if (error.response && error.response.data) {
@@ -63,6 +67,13 @@ const Login = ({ setUser }) => {
               required
             />
           </label>
+          <label>
+            <span>Category:</span>
+            <select value={category} onChange={(e) => setCategory(e.target.value)} required>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </label>
           <button type="submit" className="login-button">Login</button>
         </form>
         <p>
@@ -74,9 +85,8 @@ const Login = ({ setUser }) => {
   );
 };
 
-// Add PropTypes validation
 Login.propTypes = {
-  setUser: PropTypes.func.isRequired, // Validate setUser as a required function
+  setUser: PropTypes.func.isRequired,
 };
 
 export default Login;

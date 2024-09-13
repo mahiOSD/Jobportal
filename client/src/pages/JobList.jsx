@@ -61,18 +61,17 @@ const JobList = ({ onEdit, onDelete }) => {
 
   const handleDelete = async (jobId) => {
     try {
-     
+      
       const updatedFilteredJobs = filteredJobs.filter(job => job._id !== jobId);
       setFilteredJobs(updatedFilteredJobs);
 
       
       onDelete(jobId);
 
-     
+      
       await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
       
-     
-      // fetchJobs();
+      
     } catch (err) {
       
       setFilteredJobs(filteredJobs);

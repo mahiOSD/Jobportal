@@ -40,7 +40,7 @@ const Home = ({ user }) => {
 };
 
 Home.propTypes = {
-  user: PropTypes.object,  // The user prop is optional
+  user: PropTypes.object,  
 };
 
 export default Home;

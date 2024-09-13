@@ -1,4 +1,3 @@
-//Signup.jsx
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +9,7 @@ const Signup = ({ setUser }) => {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [category, setCategory] = useState('user'); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -19,20 +19,16 @@ const Signup = ({ setUser }) => {
       phone,
       email,
       password,
+      category, 
     };
     
     try {
-      //const response = await axios.post('http://localhost:5000/api/auth/signup', userData);
       const response = await axios.post('https://jobportal-black.vercel.app/api/auth/signup', userData);
       if (response.data) {
-        // Save token and user data to localStorage
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        // Call setUser to update the user state
         setUser(response.data.user);
-        // Navigate to home page
         navigate('/');
-        // Reload the page to reset the state (if needed)
         window.location.reload();
       }
     } catch (error) {
@@ -80,6 +76,13 @@ const Signup = ({ setUser }) => {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+          </label>
+          <label>
+            <span>Category:</span>
+            <select value={category} onChange={(e) => setCategory(e.target.value)} required>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
           </label>
           <button type="submit" className="signup-button">Sign Up</button>
         </form>
