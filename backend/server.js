@@ -1,12 +1,12 @@
-
+//backend\server.js
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import path from 'path';
 import dotenv from 'dotenv';
 import jobsRouter from './routes/jobs.js';
 import authRouter from './routes/auth.js';
-import profileRouter from './routes/profile.js'; 
+import profileRouter from './routes/profile.js';
+import auth from './middleware/auth.js';
 
 
 dotenv.config();
@@ -14,13 +14,12 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-//const allowedOrigins = ['https://jobportal-nmce.vercel.app', 'https://myjobportal.com'];
-const allowedOrigins = ['http://localhost:5173', 'https://myjobportal.com'];
+//const allowedOrigins = ['http://localhost:5173', 'https://myjobportal.com'];
+const allowedOrigins = ['https://jobportal-nmce.vercel.app', 'https://myjobportal.com'];
 
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
-      
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -30,10 +29,6 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
-app.use('/uploads', express.static('uploads'));
-
-
 
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
@@ -46,6 +41,8 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 app.use('/api/auth', authRouter);
 app.use('/api/jobs', jobsRouter);
 app.use('/api/profile', profileRouter);
+
+
 app.listen(port, () => {
   console.log(`Server is running on port: ${port}`);
 });

@@ -9,13 +9,11 @@ const JobDetails = () => {
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [error, setError] = useState('');
-  
 
   useEffect(() => {
     const fetchJob = async () => {
       try {
         const response = await axios.get(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
-        //const response = await axios.get(`http://localhost:5000/api/jobs/${jobId}`);
         setJob(response.data);
       } catch (error) {
         console.error('Error fetching job details:', error);
@@ -50,7 +48,12 @@ const JobDetails = () => {
         <li><strong>Category:</strong> {job.category}</li>
         <li><strong>Date:</strong> {job.date}</li>
         <li><strong>Experience Level:</strong> {job.experienceLevel}</li>
-        <li><strong>Required Skills:</strong> {job.requiredSkills.join(', ')}</li>
+        <li>
+          <strong>Required Skills:</strong> 
+          {Array.isArray(job.requiredSkills) 
+            ? job.requiredSkills.join(', ') 
+            : job.requiredSkills}
+        </li>
       </ul>
       <div className="button-container">
         <button className="apply-button" onClick={() => navigate(`/apply/${job._id}`)}>Apply Now</button>
@@ -58,4 +61,5 @@ const JobDetails = () => {
     </div>
   );
 };
+
 export default JobDetails;

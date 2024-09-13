@@ -20,13 +20,7 @@
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-/*
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-*/
+
 .logo img {
   width: 100px;
 }
@@ -78,6 +72,16 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+
+.feature-icon {
+  font-size: 30px;
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+}
+
+.feature-item:hover .feature-icon {
+  color: #1b2229; 
+}
 .cta-button {
   background-color: #007bff;
   color: white;
@@ -88,15 +92,14 @@
 }
 
 .cta-button:hover {
-  background-color: #0056b3;
+  background-color: #1b2229;
 }
 
 
 .home-banner {
   text-align: center;
   padding: 53px 50px;
-  /*background: url('/banner.jpg') no-repeat center center/cover;
-  background-size: cover;*/
+  
   color: white;
 }
 
@@ -158,8 +161,7 @@
   font-size: 2em;
   margin-bottom: 10px;
 }
-/*
+
 @media screen and (min-width: 480px) {
   
 }
-*/

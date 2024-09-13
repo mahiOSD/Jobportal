@@ -2,14 +2,42 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
+import axios from 'axios';
 import './JobList.css';
 
-const JobList = ({ jobs, onEdit, onDelete }) => {
+const JobList = ({ onEdit, onDelete }) => {
+  const [jobs, setJobs] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredJobs, setFilteredJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const fetchJobs = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
+      setJobs(response.data);
+      setLoading(false);
+    } catch (err) {
+      setError('Error fetching jobs');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+
+    const handleJobAdded = () => {
+      fetchJobs();
+    };
+
+    window.addEventListener('jobAdded', handleJobAdded);
+
+    return () => {
+      window.removeEventListener('jobAdded', handleJobAdded);
+    };
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -29,6 +57,27 @@ const JobList = ({ jobs, onEdit, onDelete }) => {
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleDelete = async (jobId) => {
+    try {
+      
+      const updatedFilteredJobs = filteredJobs.filter(job => job._id !== jobId);
+      setFilteredJobs(updatedFilteredJobs);
+
+      
+      onDelete(jobId);
+
+      
+      await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
+      
+      
+    } catch (err) {
+      
+      setFilteredJobs(filteredJobs);
+      setError('Error deleting job');
+      console.error('Error deleting job:', err);
+    }
   };
 
   if (loading) return <div>Loading...</div>;
@@ -87,7 +136,7 @@ const JobList = ({ jobs, onEdit, onDelete }) => {
                   </button>
                 </td>
                 <td className="job-delete">
-                  <button onClick={() => onDelete(job._id)}>Delete</button>
+                  <button onClick={() => handleDelete(job._id)}>Delete</button>
                 </td>
               </tr>
             ))}
@@ -101,16 +150,6 @@ const JobList = ({ jobs, onEdit, onDelete }) => {
 };
 
 JobList.propTypes = {
-  jobs: PropTypes.arrayOf(
-    PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      company: PropTypes.string.isRequired,
-      location: PropTypes.string.isRequired,
-      category: PropTypes.string.isRequired,
-      salary: PropTypes.string.isRequired,
-    })
-  ).isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
