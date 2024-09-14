@@ -1,14 +1,12 @@
-/* Login.css */
 
-/* Container for the login page */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  /*width: 1000px;/*vh; /* Ensures the container covers the full viewport height */
+  
   width: 1050px;
   height:  460px;
-  background: url('/loginbanner.jpg') no-repeat center center/cover; /* Background image */
+  background: url('/loginbanner.jpg') no-repeat center center/cover; 
   color: rgb(10, 10, 10);
   text-align: center;
   padding: 10px 50px;
@@ -16,25 +14,24 @@
 
   
   
-  /* Card style for the login form */
+  
   .login-card {
     background-color: #fff;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     max-width: 200px;
-   /* max-height:  200px;
-    width: 100%;*/
+   
   }
   
-  /* Header style for the login form */
+  
   .login-card h2 {
     text-align: center;
     margin-bottom: 1.5rem;
     color: #333;
   }
   
-  /* Label style for the form fields */
+  
   .login-card label {
     display: block;
     margin-bottom: 0.5rem;
@@ -43,7 +40,7 @@
   
 
   
-  /* Span style for the form field descriptions */
+  
   .login-card label span {
     display: block;
     margin-bottom: 0.25rem;
@@ -51,7 +48,7 @@
     color: #777;
   }
   
-  /* Input field style */
+ 
   .login-card input {
     width: 100%;
     padding: 0.5rem;
@@ -62,7 +59,7 @@
     box-sizing: border-box;
   }
   
-  /* Button style for the login form */
+  
   .login-button {
     width: 100%;
     padding: 0.75rem;
@@ -75,12 +72,23 @@
     transition: background-color 0.3s;
   }
   
-  /* Hover effect for the button */
+  
   .login-button:hover {
     background-color: #0056b3;
   }
+  .signup-link {
+    background: none;
+    border: none;
+    color: #0056b3;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1rem;
+  }
   
-  /* Error message style */
+  .signup-link:hover {
+    color: #003e82;
+  }
+  
   .error-message {
     color: #e74c3c;
     font-size: 0.9rem;

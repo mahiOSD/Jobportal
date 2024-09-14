@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBriefcase, faPlusSquare, faSearch, faBars, faSignOutAlt ,faChartBar} from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSignOutAlt, faSearch, faBriefcase, faPlusSquare, faChartBar } from '@fortawesome/free-solid-svg-icons';
+import PropTypes from 'prop-types';
 import './Header.css';
 
 const Header = ({ user, setUser }) => {
@@ -13,28 +13,22 @@ const Header = ({ user, setUser }) => {
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     navigate('/');
   };
 
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
-  };
-
-  const toggleDashboard = () => {
-    setDashboardVisible(!dashboardVisible);
-  };
+  const toggleDropdown = () => setDropdownVisible(!dropdownVisible);
+  const toggleDashboard = () => setDashboardVisible(!dashboardVisible);
 
   return (
     <header className="header">
       <div className="header-content">
-        {/* Dashboard Icon */}
-        {user && (
+        {user && user.category === 'admin' && (
           <div className="dashboard-icon" onClick={toggleDashboard}>
             <FontAwesomeIcon icon={faBars} />
           </div>
         )}
 
-        {/* Logo and JobPortal Text */}
         <div className="logo-container">
           <Link to="/search">
             <img src="/images/JobZeelogo.png" alt="JobPortal Logo" className="small-logo" />
@@ -42,25 +36,37 @@ const Header = ({ user, setUser }) => {
           <div className="logo">JobPortal</div>
         </div>
 
-        {/* Profile or Auth Links */}
         <div className="auth-container">
           {user ? (
-            <div className="profile-container">
-              <div className="profile-icon" onClick={toggleDropdown}>
-                <img
-                  src={user?.profilePicture || '/default-avatar.png'}
-                  alt="Profile Icon"
-                  className="profile-picture-icon"
-                />
-              </div>
-              {dropdownVisible && (
-                <div className="dropdown-menu">
-                  <Link to="/profile" className="dropdown-item">My Profile</Link>
-                </div>
+            <>
+              {user.category === 'admin' ? null : (
+                <button onClick={handleLogout} className="header-logout-button">
+                  <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+                </button>
               )}
-            </div>
+              <div className="profile-container">
+                <div className="profile-icon" onClick={toggleDropdown}>
+                  <img
+                    src={user?.profilePicture || '/default-avatar.png'}
+                    alt="Profile Icon"
+                    className="profile-picture-icon"
+                  />
+                </div>
+                {dropdownVisible && (
+                  <div className="dropdown-menu">
+                    <Link to="/profile" className="dropdown-item">My Profile</Link>
+                    {user.category !== 'admin' && (
+                      <button onClick={handleLogout} className="dropdown-item">
+                        <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </>
           ) : (
             <div className="auth-links">
+              <Link to="/" className="auth-link">Home</Link>
               <Link to="/login" className="auth-link">Log in</Link>
               <Link to="/signup" className="auth-link">Sign Up</Link>
             </div>
@@ -68,8 +74,7 @@ const Header = ({ user, setUser }) => {
         </div>
       </div>
 
-      {/* Dashboard Menu */}
-      {user && (
+      {user && user.category === 'admin' && (
         <div className={`dashboard-menu ${dashboardVisible ? 'show' : ''}`}>
           <Link to="/search" className="dashboard-item">
             <FontAwesomeIcon icon={faSearch} className="nav-icon" />
@@ -81,7 +86,7 @@ const Header = ({ user, setUser }) => {
           </Link>
           <Link to="/add-job" className="dashboard-item">
             <FontAwesomeIcon icon={faPlusSquare} className="nav-icon" />
-            Post A Job
+            Add New Job
           </Link>
           <Link to="/dashboard" className="dashboard-item">
             <FontAwesomeIcon icon={faChartBar} className="nav-icon" />

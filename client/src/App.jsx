@@ -11,11 +11,12 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import PrivateRoute from './components/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute'; 
 import ApplicationForm from './pages/ApplicationForm'; 
 import Profile from './components/Profile';
 import JobList from './pages/JobList';
 import Dashboard from './pages/Dashboard';
+
 import './App.css';
 
 const App = () => {
@@ -107,8 +108,6 @@ const App = () => {
 
   const ApplicationFormPage = () => {
     const { jobId } = useParams();
-    const navigate = useNavigate();
-
     return <ApplicationForm jobId={jobId} onClose={() => navigate(`/job/${jobId}`)} />;
   };
 
