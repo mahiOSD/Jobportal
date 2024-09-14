@@ -21,25 +21,17 @@ const Login = ({ setUser }) => {
         password,
         category, 
       });
-      console.log(response.data);
-
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-        setUser(response.data.user);
-        
-        window.dispatchEvent(new Event('userLoggedIn'));
+        setUser(response.data.user);  
         navigate('/dashboard');
+        window.dispatchEvent(new Event('userLoggedIn')); 
       } else {
         setError('Login failed: Invalid response');
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        setError(error.response.data.message);
-      } else {
-        setError('An error occurred. Please try again.');
-      }
-      console.error('Error logging in:', error);
+      setError(error.response?.data?.message || 'An error occurred. Please try again.');
     }
   };
 
@@ -77,8 +69,16 @@ const Login = ({ setUser }) => {
           <button type="submit" className="login-button">Login</button>
         </form>
         <p>
-          Forgot your password?{' '}
-          <button onClick={() => navigate('/forgot-password')} className="forgot-password-link">Reset it here</button>
+          Forgot your password?&nbsp;
+          <button onClick={() => navigate('/forgot-password')} className="forgot-password-link">
+            Reset it here
+          </button>
+        </p>
+        <p>
+          Don&apos;t have an account?&nbsp;
+          <button onClick={() => navigate('/signup')} className="signup-link">
+            Sign up here
+          </button>
         </p>
       </div>
     </div>

@@ -19,7 +19,7 @@ const Signup = ({ setUser }) => {
       phone,
       email,
       password,
-      category, 
+      category,
     };
     
     try {
@@ -28,13 +28,14 @@ const Signup = ({ setUser }) => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
         setUser(response.data.user);
-        navigate('/');
+        navigate('/search'); 
         window.location.reload();
       }
     } catch (error) {
       console.error('Error registering user:', error);
     }
   };
+  
 
   return (
     <div className="signup-container">
