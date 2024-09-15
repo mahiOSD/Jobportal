@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import PropTypes from 'prop-types'; 
+import PropTypes from 'prop-types';
 import './Login.css';
 
 const Login = ({ setUser }) => {
@@ -21,11 +21,18 @@ const Login = ({ setUser }) => {
         password,
         category, 
       });
-      if (response.data && response.data.token) {
-        localStorage.setItem('token', response.data.token);
+
+      
+      if (response.data && response.data.token && response.data.refreshToken) {
+        
+        localStorage.setItem('token', response.data.token); 
+        localStorage.setItem('refreshToken', response.data.refreshToken); 
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        
         setUser(response.data.user);  
         navigate('/dashboard');
+        
+        
         window.dispatchEvent(new Event('userLoggedIn')); 
       } else {
         setError('Login failed: Invalid response');

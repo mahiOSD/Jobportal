@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -14,74 +14,17 @@ const AddJob = () => {
     experienceLevel: '',
     requiredSkills: '',
   });
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Submitting job data:', newJob);
-
-    let token = localStorage.getItem('token');
-    if (!token) {
-      console.error('Token is missing.');
-      return;
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user && user.category === 'admin') {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
     }
-
-    try {
-      const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      });
-      console.log('Job added successfully:', response.data);
-      
-      setNewJob({
-        title: '',
-        company: '',
-        description: '',
-        location: '',
-        salary: '',
-        category: '',
-        date: '',
-        experienceLevel: '',
-        requiredSkills: '',
-      });
-      navigate('/jobs');
-      
-      window.dispatchEvent(new Event('jobAdded'));
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        console.error('Token expired, refreshing...');
-
-        try {
-          token = await refreshToken();
-          const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            },
-          });
-          console.log('Job added successfully after token refresh:', response.data);
-          
-          setNewJob({
-            title: '',
-            company: '',
-            description: '',
-            location: '',
-            salary: '',
-            category: '',
-            date: '',
-            experienceLevel: '',
-            requiredSkills: '',
-          });
-          navigate('/jobs');
-          window.dispatchEvent(new Event('jobAdded'));
-        } catch (refreshError) {
-          console.error('Token refresh failed:', refreshError);
-        }
-      } else {
-        console.error('Error adding job:', error.response ? error.response.data : error.message);
-      }
-    }
-  };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -90,6 +33,50 @@ const AddJob = () => {
       [name]: value,
     });
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!isAdmin) {
+      console.error('Insufficient permissions to add a job');
+      return;
+    }
+
+    const token = localStorage.getItem('token'); 
+    if (!token) {
+      console.error('Token is missing.');
+      return;
+    }
+
+    try {
+      const response = await axios.post('https://jobportal-black.vercel.app/api/jobs/add', newJob, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Job added successfully:', response.data);
+      
+      
+      navigate('/jobs');
+
+      
+      window.dispatchEvent(new Event('jobAdded'));
+    } catch (error) {
+      if (error.response) {
+        console.error('Error:', error.response.data.message);
+      } else {
+        console.error('Error adding job:', error.message);
+      }
+
+      if (error.response && error.response.status === 403) {
+        console.error('Forbidden: Insufficient permissions.');
+      }
+    }
+  };
+  
+  if (!isAdmin) {
+    return <p>You do not have permission to add a job. Only admins can add new jobs.</p>;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="add-job-form">
@@ -133,24 +120,6 @@ const AddJob = () => {
       <button type="submit">Add Job</button>
     </form>
   );
-};
-
-
-const refreshToken = async () => {
-  const refreshToken = localStorage.getItem('refreshToken');
-  if (!refreshToken) {
-    throw new Error('Refresh token is missing.');
-  }
-
-  try {
-    const response = await axios.post('https://jobportal-black.vercel.app/api/auth/refresh', { refreshToken });
-    const newToken = response.data.token;
-    localStorage.setItem('token', newToken);
-    return newToken;
-  } catch (error) {
-    console.error('Error refreshing token:', error);
-    throw error;
-  }
 };
 
 export default AddJob;
