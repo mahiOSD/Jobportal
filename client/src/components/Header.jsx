@@ -38,32 +38,25 @@ const Header = ({ user, setUser }) => {
 
         <div className="auth-container">
           {user ? (
-            <>
-              {user.category === 'admin' ? null : (
-                <button onClick={handleLogout} className="header-logout-button">
-                  <FontAwesomeIcon icon={faSignOutAlt} /> Logout
-                </button>
-              )}
-              <div className="profile-container">
-                <div className="profile-icon" onClick={toggleDropdown}>
-                  <img
-                    src={user?.profilePicture || '/default-avatar.png'}
-                    alt="Profile Icon"
-                    className="profile-picture-icon"
-                  />
-                </div>
-                {dropdownVisible && (
-                  <div className="dropdown-menu">
-                    <Link to="/profile" className="dropdown-item">My Profile</Link>
-                    {user.category !== 'admin' && (
-                      <button onClick={handleLogout} className="dropdown-item">
-                        <FontAwesomeIcon icon={faSignOutAlt} /> Logout
-                      </button>
-                    )}
-                  </div>
-                )}
+            <div className="profile-container">
+              <div className="profile-icon" onClick={toggleDropdown}>
+                <img
+                  src={user?.profilePicture || '/default-avatar.png'}
+                  alt="Profile Icon"
+                  className="profile-picture-icon"
+                />
               </div>
-            </>
+              {dropdownVisible && (
+                <div className="dropdown-menu">
+                  <Link to="/profile" className="dropdown-item">My Profile</Link>
+                  {user.category !== 'admin' && (
+                    <button onClick={handleLogout} className="dropdown-item logout">
+                      <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
           ) : (
             <div className="auth-links">
               <Link to="/" className="auth-link">Home</Link>

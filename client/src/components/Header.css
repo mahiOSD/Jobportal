@@ -1,3 +1,4 @@
+
 .header {
   display: flex;
   align-items: center;
@@ -11,57 +12,56 @@
   justify-content: space-between;
 }
 
+
 .header-content {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
 }
+
 
 .logo-container {
   display: flex;
   align-items: center;
-  margin-right: auto; 
+  
 }
+
 
 .logo {
   font-size: 28px;
   font-weight: bold;
   color: #333;
-  margin-right: 20px; 
+ 
 }
+
 
 .small-logo {
   height: 60px;
   margin-right: 10px; 
 }
 
+
 .auth-container {
   display: flex;
   align-items: center;
-  gap: 50px; 
+  
   margin-right: -210px;
 }
 
-.header-logout-button {
-  margin-left: 80px; 
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
 
 .profile-container {
   display: flex;
   align-items: center;
 }
 
+
 .profile-icon {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
+
 
 .profile-picture-icon {
   width: 32px;
@@ -70,6 +70,7 @@
   object-fit: cover;
   border: 2px solid #425060;
 }
+
 
 .dashboard-icon {
   cursor: pointer;
@@ -88,6 +89,7 @@
   margin-left: -250px;
 }
 
+/* Dashboard menu styles */
 .dashboard-menu {
   position: absolute;
   top: 60px;
@@ -106,10 +108,12 @@
   flex-direction: column;
 }
 
+
 .dashboard-menu.show {
   transform: translateX(0);
   opacity: 1;
 }
+
 
 .dashboard-item {
   padding: 15px 20px;
@@ -120,18 +124,22 @@
   white-space: nowrap;
 }
 
+
 .dashboard-item.logout {
   margin-top: auto; 
 }
+
 
 .nav-icon {
   margin-right: 10px; 
   font-size: 18px; 
 }
 
+
 .spacer {
   flex: 1;
 }
+
 
 .dropdown-menu {
   position: absolute;
@@ -146,20 +154,29 @@
   flex-direction: column;
 }
 
+
 .dropdown-item {
   padding: 15px 20px;
   text-decoration: none;
   color: #333;
 }
 
+
 .dropdown-item:hover {
   background-color: #f0f0f0;
 }
+
+
+.dropdown-item.logout {
+  margin-top: auto;
+}
+
 
 .auth-links {
   display: flex;
   gap: 15px;
 }
+
 
 .auth-link {
   color: #101111;
@@ -167,6 +184,7 @@
   font-weight: bold;
   font-size: 20px; 
 }
+
 
 .auth-link:hover {
   text-decoration: underline;

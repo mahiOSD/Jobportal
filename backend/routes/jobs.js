@@ -243,8 +243,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-
-router.post('/add', auth, async (req, res) => {
+router.post('/add', auth(['admin']), async (req, res) => {
   const { title, company, description, location, salary, category, date, experienceLevel, requiredSkills } = req.body;
 
   if (!title || !company || !description || !location || !salary || !category || !date || !experienceLevel || !requiredSkills) {

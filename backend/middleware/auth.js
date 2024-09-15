@@ -1,30 +1,34 @@
-//backend\middleware\auth.js      
-
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 dotenv.config();
-const auth = async (req, res, next) => {
-  const authHeader = req.header('Authorization');
-  
+
+const auth = (allowedRoles) => (req, res, next) => {
+  const authHeader = req.headers.authorization;
   if (!authHeader) {
-    return res.status(401).json({ message: 'Authorization header is missing.' });
+    console.log('No authorization header provided');
+    return res.status(403).json({ message: 'No authorization header provided' });
   }
-
-  const token = authHeader.replace('Bearer ', '');
-
+  const token = authHeader.split(' ')[1];
   if (!token) {
-    return res.status(401).json({ message: 'Authorization token is missing.' });
+    console.log('No token provided');
+    return res.status(403).json({ message: 'No token provided' });
   }
-
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
+    console.log('Decoded User:', req.user);
+    if (!allowedRoles.includes(req.user.category)) {
+      console.log('Insufficient permissions');
+      return res.status(403).json({ message: 'Insufficient permissions' });
+    }
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Invalid token.' });
+    console.log('Invalid token:', error);
+    return res.status(403).json({ message: 'Invalid token' });
   }
 };
+
 
 
 export default auth;
