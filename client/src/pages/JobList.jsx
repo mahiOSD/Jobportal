@@ -76,7 +76,7 @@ const JobList = ({ onEdit, onDelete }) => {
       
       setFilteredJobs(filteredJobs);
       setError('Error deleting job');
-      console.error('Error deleting job:', err);
+      
     }
   };
 
