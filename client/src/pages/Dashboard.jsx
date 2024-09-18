@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import axios from 'axios';
-import './Dashboard.css'; 
+import './Dashboard.css';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -10,10 +10,12 @@ const Dashboard = () => {
   const [barData, setBarData] = useState({});
   const [pieData, setPieData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('token');
+      console.log('Token:', token); 
       if (!token) throw new Error('Token is missing');
 
       const { data } = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
@@ -21,6 +23,8 @@ const Dashboard = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      console.log('Stats data:', data); 
 
       setBarData({
         labels: ['Total Jobs', 'Total Applications', 'Jobs Added'],
@@ -46,19 +50,30 @@ const Dashboard = () => {
           },
         ],
       });
-      
+
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching job stats:', error);
+      console.error('Error fetching job stats:', error); 
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchStats();
+    const category = localStorage.getItem('userCategory');
+    console.log('User category:', category); 
+
+    if (category === 'admin') {
+      setIsAdmin(true);
+      fetchStats();
+    } else {
+      setIsAdmin(false);
+    }
 
     const handleUserLogin = () => {
-      fetchStats();
+      const updatedCategory = localStorage.getItem('userCategory');
+      if (updatedCategory === 'admin') {
+        fetchStats();
+      }
     };
 
     window.addEventListener('userLoggedIn', handleUserLogin);
@@ -67,6 +82,10 @@ const Dashboard = () => {
       window.removeEventListener('userLoggedIn', handleUserLogin);
     };
   }, []);
+
+  if (!isAdmin) {
+    return <p>Access denied. Admins only.</p>;
+  }
 
   return (
     <div className="dashboard-container">
