@@ -14,25 +14,23 @@ const Login = ({ setUser }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); 
-
+  
     try {
       const response = await axios.post('https://jobportal-black.vercel.app/api/auth/login', {
         email,
         password,
         category, 
       });
-
-      
+  
       if (response.data && response.data.token && response.data.refreshToken) {
-        
         localStorage.setItem('token', response.data.token); 
         localStorage.setItem('refreshToken', response.data.refreshToken); 
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('userCategory', category); 
         
         setUser(response.data.user);  
         navigate('/dashboard');
-        
-        
+  
         window.dispatchEvent(new Event('userLoggedIn')); 
       } else {
         setError('Login failed: Invalid response');
@@ -41,6 +39,7 @@ const Login = ({ setUser }) => {
       setError(error.response?.data?.message || 'An error occurred. Please try again.');
     }
   };
+  
 
   return (
     <div className="login-container">
