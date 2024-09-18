@@ -183,23 +183,51 @@ let exampleJobs = [
   },
 ];
 
-router.get('/stats', auth, async (req, res) => {
+router.get('/stats', auth(['admin']), async (req, res) => {
   try {
+    console.log('User ID:', req.user.id);
+    console.log('User Category:', req.user.category); 
+
     
+    if (req.user.category !== 'admin') {
+      return res.status(403).json({ message: 'Access denied. Admins only.' });
+    }
+
     const totalJobsFromDB = await Job.countDocuments();
-    
-    
     const totalExampleJobs = exampleJobs.length;
-    
-    
     const totalJobs = totalJobsFromDB + totalExampleJobs;
 
     const totalApplications = await Application.countDocuments();
     const jobsAdded = await Job.countDocuments({ createdBy: req.user.id });
-    const categoryCounts = await Job.aggregate([
+    
+    
+    const dbCategoryCounts = await Job.aggregate([
       { $group: { _id: "$category", count: { $sum: 1 } } },
       { $project: { category: "$_id", count: 1, _id: 0 } }
     ]);
+
+    
+    const exampleCategoryCounts = exampleJobs.reduce((acc, job) => {
+      const category = job.category;
+      if (!acc[category]) {
+        acc[category] = 0;
+      }
+      acc[category]++;
+      return acc;
+    }, {});
+
+    
+    const categoryCounts = dbCategoryCounts.map(dbCat => {
+      const exampleCount = exampleCategoryCounts[dbCat.category] || 0;
+      return { category: dbCat.category, count: dbCat.count + exampleCount };
+    });
+
+    
+    Object.keys(exampleCategoryCounts).forEach(cat => {
+      if (!categoryCounts.find(dbCat => dbCat.category === cat)) {
+        categoryCounts.push({ category: cat, count: exampleCategoryCounts[cat] });
+      }
+    });
 
     res.json({
       totalJobs,
@@ -208,9 +236,11 @@ router.get('/stats', auth, async (req, res) => {
       categoryCounts
     });
   } catch (error) {
+    console.error('Error fetching job stats:', error);
     res.status(500).json({ message: 'Error fetching job stats', error: error.message });
   }
 });
+
 
 
 router.get('/', async (req, res) => {
