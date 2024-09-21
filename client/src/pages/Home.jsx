@@ -17,23 +17,23 @@ const Home = ({ user }) => {
         <h1>The Easiest Way to Get Your New Job</h1>
         <p>Your one-stop destination for finding your dream job</p>
         <div className="features">
-          <Link to="/signup" className="feature-item"> 
+          <Link to="/login" className="feature-item"> 
             <FaSearch className="feature-icon" />
             <h3>Search Jobs</h3>
             <p>Find the job that fits your life</p>
           </Link>
-          <Link to="/signup" className="feature-item"> 
+          <Link to="/login" className="feature-item"> 
             <FaBriefcase className="feature-icon" />
             <h3>Post Jobs</h3>
             <p>Reach millions of job seekers</p>
           </Link>
-          <Link to="/signup" className="feature-item"> 
+          <Link to="/login" className="feature-item"> 
             <FaUser className="feature-icon" />
             <h3>Create Profile</h3>
             <p>Showcase your skills and experience</p>
           </Link>
         </div>
-        {!user && <Link to="/signup" className="cta-button">Get Started</Link>}
+        {!user && <Link to="/login" className="cta-button">Get Started</Link>}
       </div>
     </div>
   );

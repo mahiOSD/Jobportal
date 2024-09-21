@@ -5,17 +5,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown, faUser, faTachometerAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import './UserProfile.css';
 import axios from 'axios';
+import LoadingSpinner from './LoadingSpinner';
 
 const UserProfile = ({ user, setUser }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [profile, setProfile] = useState(user || {});
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
       if (!user) {
         try {
-          const res = await axios.get('https://jobportal-black.vercel.app/api/auth/profile', {
+          setLoading(true);
+          //const res = await axios.get('http://localhost:5000/api/auth/profile', {
+            const res = await axios.get('https://jobportal-black.vercel.app/api/auth/profile', {
+
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             }
@@ -23,7 +28,11 @@ const UserProfile = ({ user, setUser }) => {
           setProfile(res.data);
         } catch (err) {
           console.error('Error fetching profile:', err);
+        } finally {
+          setLoading(false);
         }
+      } else {
+        setLoading(false);
       }
     };
 
@@ -42,11 +51,17 @@ const UserProfile = ({ user, setUser }) => {
     setDropdownVisible(!dropdownVisible);
   };
 
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <div className="user-profile">
       <button onClick={toggleDropdown} className="user-profile-button">
         <img 
+          //src={`http://localhost:5000${profile.profilePicture || '/default-avatar.png'}`} 
           src={`https://jobportal-black.vercel.app${profile.profilePicture || '/default-avatar.png'}`} 
+
           alt="User Profile" 
           className="profile-icon" 
         />

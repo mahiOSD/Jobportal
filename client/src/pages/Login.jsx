@@ -16,7 +16,9 @@ const Login = ({ setUser }) => {
     setError(''); 
 
     try {
-      const response = await axios.post('https://jobportal-black.vercel.app/api/auth/login', {
+      //const response = await axios.post('http://localhost:5000/api/auth/login', {
+        const response = await axios.post('https://jobportal-black.vercel.app/api/auth/login', {
+
         email,
         password,
         category, 
@@ -30,7 +32,7 @@ const Login = ({ setUser }) => {
         
         setUser(response.data.user);  
 
-       
+        // Redirect based on user category
         if (response.data.user.category === 'admin') {
           navigate('/dashboard');
         } else {

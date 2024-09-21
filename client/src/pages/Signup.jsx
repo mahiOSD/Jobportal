@@ -22,7 +22,9 @@ const Signup = () => {
     };
     
     try {
+      //const response = await axios.post('http://localhost:5000/api/auth/signup', userData);
       const response = await axios.post('https://jobportal-black.vercel.app/api/auth/signup', userData);
+
       if (response.data) {
         
         navigate('/login');

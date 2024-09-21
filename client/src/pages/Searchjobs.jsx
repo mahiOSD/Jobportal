@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import locationIcon from '/images/location-icon.jpg';
 import './Searchjob.css';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const SearchJobs = ({ jobs }) => {
   const [category, setCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredJobs, setFilteredJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const filterJobs = () => {
@@ -24,6 +26,7 @@ const SearchJobs = ({ jobs }) => {
         );
       }
       setFilteredJobs(filtered);
+      setLoading(false);
     };
 
     filterJobs();
@@ -41,7 +44,9 @@ const SearchJobs = ({ jobs }) => {
     setSearchTerm('');
     setCategory('');
   };
-
+  if (loading) {
+    return <LoadingSpinner />;
+  }
   return (
     <div className="search-jobs">
       <h2>Find your <span className="highlight">new job</span> today</h2>

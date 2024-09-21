@@ -3,6 +3,7 @@ import { Bar, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
 import axios from 'axios';
 import './Dashboard.css';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -13,12 +14,14 @@ const Dashboard = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchStats = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem('token');
       console.log('Token:', token); 
       if (!token) throw new Error('Token is missing');
 
-      const { data } = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
+      //const { data } = await axios.get('http://localhost:5000/api/jobs/stats', {
+        const { data } = await axios.get('https://jobportal-black.vercel.app/api/jobs/stats', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -86,7 +89,9 @@ const Dashboard = () => {
   if (!isAdmin) {
     return <p>Access denied. Admins only.</p>;
   }
-
+  if (loading) {
+    return <LoadingSpinner />;
+  }
   return (
     <div className="dashboard-container">
       {loading ? <p>Loading...</p> : (
