@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaSearch } from 'react-icons/fa';
 import axios from 'axios';
 import './JobList.css';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const JobList = ({ onEdit, onDelete }) => {
   const [jobs, setJobs] = useState([]);
@@ -16,13 +17,16 @@ const JobList = ({ onEdit, onDelete }) => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
+      //const response = await axios.get('http://localhost:5000/api/jobs');
       const response = await axios.get('https://jobportal-black.vercel.app/api/jobs');
       setJobs(response.data);
       setLoading(false);
     } catch (err) {
       setError('Error fetching jobs');
-      setLoading(false);
+      //setLoading(false);
     }
+    setLoading(false);
+
   };
 
   useEffect(() => {
@@ -69,19 +73,22 @@ const JobList = ({ onEdit, onDelete }) => {
       onDelete(jobId);
 
       
+      //await axios.delete(`http://localhost:5000/api/jobs/${jobId}`);
       await axios.delete(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
+
       
       
     } catch (err) {
       
       setFilteredJobs(filteredJobs);
       setError('Error deleting job');
-      console.error('Error deleting job:', err);
+    
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) {
+    return <LoadingSpinner />;
+  }  if (error) return <div>{error}</div>;
 
   return (
     <div className="job-list-container">

@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import './Profile.css';
+import LoadingSpinner from './LoadingSpinner';
 
 const Profile = ({ user, setUser }) => {
   const [profile, setProfile] = useState(user || {});
   const [profilePicture, setProfilePicture] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [uploadLoading, setUploadLoading] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -16,17 +19,20 @@ const Profile = ({ user, setUser }) => {
             console.error('No token found');
             return;
           }
+          //const res = await axios.get('http://localhost:5000/api/auth/profile', {
+            const res = await axios.get('https://jobportal-black.vercel.app/api/auth/profile', {
 
-          const res = await axios.get('https://jobportal-black.vercel.app/api/auth/profile', {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-
           setProfile(res.data);
         } catch (err) {
           console.error('Error fetching profile:', err);
         }
+        setLoading(false);
+      } else {
+        setLoading(false);
       }
     };
 
@@ -39,20 +45,22 @@ const Profile = ({ user, setUser }) => {
 
   const handleProfilePictureUpload = async (e) => {
     e.preventDefault();
-
     if (!profilePicture) {
       console.error('No profile picture selected');
       return;
     }
+
+    setUploadLoading(true);
 
     const formData = new FormData();
     formData.append('profilePicture', profilePicture);
     formData.append('userId', profile._id);
 
     try {
+      //const response = await axios.post('http://localhost:5000/api/profile/uploadProfilePicture',
       const response = await axios.post(
-        'https://jobportal-black.vercel.app/api/profile/uploadProfilePicture',
-        formData,
+        'https://jobportal-black.vercel.app/api/profile/uploadProfilePicture',  
+      formData,
         {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -75,32 +83,54 @@ const Profile = ({ user, setUser }) => {
       setUser(updatedUser);
     } catch (error) {
       console.error('Failed to upload profile picture:', error);
+    } finally {
+      setUploadLoading(false);
     }
   };
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="profile">
       <h1>My Profile</h1>
-      <div className="profile-details">
-        <img
-          src={profile.profilePicture || '/default-avatar.png'}
-          alt="Profile"
-          className="profile-picture"
-        />
-        <p><strong>Name:</strong> {profile.name || 'N/A'}</p>
-        <p><strong>Email:</strong> {profile.email || 'N/A'}</p>
-        <p><strong>Mobile Number:</strong> {profile.phone || 'N/A'}</p>
-      </div>
+      {loading ? (
+        <div className="loading-container">
+          <LoadingSpinner />
+          <p>Loading profile information...</p>
+        </div>
+      ) : (
+        <>
+          <div className="profile-details">
+            <img
+              src={profile.profilePicture || '/default-avatar.png'}
+              alt="Profile"
+              className="profile-picture"
+            />
+            <p><strong>Name:</strong> {profile.name || 'N/A'}</p>
+            <p><strong>Email:</strong> {profile.email || 'N/A'}</p>
+            <p><strong>Mobile Number:</strong> {profile.phone || 'N/A'}</p>
+          </div>
 
-      <h2>Upload Profile Picture</h2>
-      <form onSubmit={handleProfilePictureUpload}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleProfilePictureChange}
-        />
-        <button type="submit">Upload</button>
-      </form>
+          <h2>Upload Profile Picture</h2>
+          {uploadLoading ? (
+            <div className="loading-container">
+              <LoadingSpinner />
+              <p>Uploading profile picture...</p>
+            </div>
+          ) : (
+            <form onSubmit={handleProfilePictureUpload}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleProfilePictureChange}
+              />
+              <button type="submit">Upload</button>
+            </form>
+          )}
+        </>
+      )}
     </div>
   );
 };
@@ -111,3 +141,4 @@ Profile.propTypes = {
 };
 
 export default Profile;
+  

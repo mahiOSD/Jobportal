@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect, useRef} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSignOutAlt, faSearch, faBriefcase, faPlusSquare, faChartBar } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,8 @@ import './Header.css';
 const Header = ({ user, setUser }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const [dashboardVisible, setDashboardVisible] = useState(false);
+  const dropdownRef = useRef(null);
+  const dashboardRef = useRef(null);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -19,7 +21,21 @@ const Header = ({ user, setUser }) => {
 
   const toggleDropdown = () => setDropdownVisible(!dropdownVisible);
   const toggleDashboard = () => setDashboardVisible(!dashboardVisible);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownVisible(false);
+      }
+      if (dashboardRef.current && !dashboardRef.current.contains(event.target)) {
+        setDashboardVisible(false);
+      }
+    };
 
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return (
     <header className="header">
       <div className="header-content">
@@ -38,7 +54,7 @@ const Header = ({ user, setUser }) => {
 
         <div className="auth-container">
           {user ? (
-            <div className="profile-container">
+            <div className="profile-container"ref={dropdownRef}>
               <div className="profile-icon" onClick={toggleDropdown}>
                 <img
                   src={user?.profilePicture || '/default-avatar.png'}
@@ -68,7 +84,7 @@ const Header = ({ user, setUser }) => {
       </div>
 
       {user && user.category === 'admin' && (
-        <div className={`dashboard-menu ${dashboardVisible ? 'show' : ''}`}>
+        <div className={`dashboard-menu ${dashboardVisible ? 'show' : ''}`} ref={dashboardRef}>
           <Link to="/search" className="dashboard-item">
             <FontAwesomeIcon icon={faSearch} className="nav-icon" />
             Start a Search

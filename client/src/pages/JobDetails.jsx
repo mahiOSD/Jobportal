@@ -3,27 +3,34 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './JobDetails.css';
 import locationIcon from '/images/location-icon.jpg';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const JobDetails = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
   const [job, setJob] = useState(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchJob = async () => {
       try {
+        //const response = await axios.get(`http://localhost:5000/api/jobs/${jobId}`);
         const response = await axios.get(`https://jobportal-black.vercel.app/api/jobs/${jobId}`);
         setJob(response.data);
       } catch (error) {
         console.error('Error fetching job details:', error);
         setError('Error fetching job details');
       }
+      setLoading(false);
+
     };
 
     fetchJob();
   }, [jobId]);
-
+  if (loading) {
+    return <LoadingSpinner />;
+  }
   if (error) {
     return <div>{error}</div>;
   }

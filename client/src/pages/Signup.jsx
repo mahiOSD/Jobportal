@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Signup.css'; 
 
-const Signup = ({ setUser }) => {
+const Signup = () => { 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -23,20 +22,18 @@ const Signup = ({ setUser }) => {
     };
     
     try {
+      //const response = await axios.post('http://localhost:5000/api/auth/signup', userData);
       const response = await axios.post('https://jobportal-black.vercel.app/api/auth/signup', userData);
+
       if (response.data) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        setUser(response.data.user);
-        navigate('/search'); 
-        window.location.reload();
+        
+        navigate('/login');
       }
     } catch (error) {
       console.error('Error registering user:', error);
     }
   };
   
-
   return (
     <div className="signup-container">
       <div className="signup-card">
@@ -90,10 +87,6 @@ const Signup = ({ setUser }) => {
       </div>
     </div>
   );
-};
-
-Signup.propTypes = {
-  setUser: PropTypes.func.isRequired,
 };
 
 export default Signup;

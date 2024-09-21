@@ -16,22 +16,28 @@ const Login = ({ setUser }) => {
     setError(''); 
 
     try {
-      const response = await axios.post('https://jobportal-black.vercel.app/api/auth/login', {
+      //const response = await axios.post('http://localhost:5000/api/auth/login', {
+        const response = await axios.post('https://jobportal-black.vercel.app/api/auth/login', {
+
         email,
         password,
         category, 
       });
 
-      
       if (response.data && response.data.token && response.data.refreshToken) {
-        
         localStorage.setItem('token', response.data.token); 
         localStorage.setItem('refreshToken', response.data.refreshToken); 
         localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('userCategory', response.data.user.category); 
         
         setUser(response.data.user);  
-        navigate('/dashboard');
-        
+
+        // Redirect based on user category
+        if (response.data.user.category === 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/search');
+        }
         
         window.dispatchEvent(new Event('userLoggedIn')); 
       } else {
