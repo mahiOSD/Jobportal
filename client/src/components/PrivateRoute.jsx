@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const PrivateRoute = ({ user, children }) => {
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/search" />;
   }
 
   return children;
